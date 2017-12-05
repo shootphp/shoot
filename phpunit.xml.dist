@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<phpunit beStrictAboutChangesToGlobalState="true"
+         beStrictAboutOutputDuringTests="true"
+         beStrictAboutTestsThatDoNotTestAnything="true"
+         bootstrap="vendor/autoload.php">
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true"
+                   processUncoveredFilesFromWhitelist="true">
+            <directory>src/</directory>
+        </whitelist>
+    </filter>
+    <testsuites>
+        <testsuite>
+            <directory>tests/</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

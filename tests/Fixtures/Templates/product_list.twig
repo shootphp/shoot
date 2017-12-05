@@ -1,0 +1,7 @@
+{% model 'Shoot\\Shoot\\Tests\\Fixtures\\ProductListPresentationModel' %}
+# Products
+{% for product in products %}
+    {% if product is model %}
+        {% include 'product.twig' with product|variables %}
+    {% endif %}
+{% endfor %}
