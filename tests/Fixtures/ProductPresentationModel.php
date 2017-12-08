@@ -10,8 +10,10 @@ final class ProductPresentationModel extends PresentationModel implements HasPre
 {
     /** @var bool */
     protected $on_stock = false;
+
     /** @var string */
     protected $product_name = '';
+
     /** @var int */
     protected $stock_quantity = 0;
 

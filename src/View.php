@@ -5,6 +5,9 @@ namespace Shoot\Shoot;
 
 use InvalidArgumentException;
 
+/**
+ * A view is the visual representation of a model.
+ */
 final class View
 {
     /** @var callable */

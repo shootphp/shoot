@@ -42,7 +42,7 @@ final class PresenterMiddleware implements MiddlewareInterface
     {
         $presentationModel = $view->getPresentationModel();
 
-        if (!$this->hasData($presentationModel) && $presentationModel instanceof HasPresenterInterface) {
+        if ($presentationModel instanceof HasPresenterInterface && !$this->hasData($presentationModel)) {
             $presenter = $this->loadPresenter($presentationModel);
             $presentationModel = $presenter->present($context, $presentationModel);
             $view = $view->withPresentationModel($presentationModel);

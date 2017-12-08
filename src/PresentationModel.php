@@ -52,17 +52,11 @@ class PresentationModel
      */
     private function setVariables(array $variables)
     {
-        if (static::class === self::class) {
-            foreach ($variables as $variable => $value) {
-                if (is_string($variable)) {
-                    $this->$variable = $value;
-                }
-            }
-        } else {
-            foreach ($variables as $variable => $value) {
-                if (property_exists($this, $variable)) {
-                    $this->$variable = $value;
-                }
+        $isGeneric = static::class === self::class;
+
+        foreach ($variables as $variable => $value) {
+            if (is_string($variable) && ($isGeneric || property_exists($this, $variable))) {
+                $this->$variable = $value;
             }
         }
     }
