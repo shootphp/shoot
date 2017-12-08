@@ -30,8 +30,8 @@ final class LoggingMiddlewareTest extends TestCase
             $wasCalled = true;
         });
 
-        $middleware = new LoggingMiddleware($logger);
         $context = new Context();
+        $middleware = new LoggingMiddleware($logger);
         $next = new MiddlewareCallback();
         $view = ViewFactory::create();
 
