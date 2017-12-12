@@ -44,9 +44,18 @@ $ composer require shoot/shoot
 ```
 
 ## Usage
-Below you'll find a request handler serving blog posts. Note the context being set for the pipeline. The pipeline is
-part of Shoot, and all views being rendered pass through it. This context is available to all middleware and presenters.
-You'll see how it's used further down.
+First, set up Shoot's pipeline. All views being rendered pass through it, and are processed by its middleware. For Shoot
+to be useful, you'll need at least the PresenterMiddleware, which takes a PSR-11 compliant DI container as its
+dependency. All that's left is then to add it to Twig as an extension:
+
+```php
+$pipeline = new Pipeline([new PresenterMiddleware($container)]);
+
+$twig->addExtension($pipeline);
+```
+
+Below you'll find a request handler serving blog posts. Note the context being set for the pipeline. This context is
+available to all middleware and presenters. You'll see how it's used further down.
 
 ```php
 $app->get('/posts/{post_id}', function ($request, $response) {
@@ -99,8 +108,8 @@ final class Post extends PresentationModel implements HasPresenter
 }
 ```
 
-The presentation model in turn has the following presenter. Note that presenters are loaded from any PSR-11 compliant DI
-container, so each presenter can have its own dependencies.
+The presentation model in turn has the following presenter. Since presenters are loaded from a DI container, each
+presenter can have its own dependencies to load and format data.
 
 ```php
 final class PostPresenter implements PresenterInterface
