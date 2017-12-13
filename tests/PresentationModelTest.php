@@ -6,6 +6,7 @@ namespace Shoot\Shoot\Tests;
 use PHPUnit\Framework\TestCase;
 use Shoot\Shoot\PresentationModel;
 use Shoot\Shoot\Tests\Fixtures\ProductPresentationModel;
+use TypeError;
 
 final class PresentationModelTest extends TestCase
 {
@@ -14,15 +15,11 @@ final class PresentationModelTest extends TestCase
      */
     public function testGenericPresentationModelsShouldOnlyAllowStringVariableNames()
     {
-        $presentationModel = new PresentationModel([
-            'some_variable' => 'Expect this to be set',
-            0 => 'But not this',
+        $this->expectException(TypeError::class);
+
+        new PresentationModel([
+            0 => 'A non-string key causes a type error to be thrown',
         ]);
-
-        $variables = $presentationModel->getVariables();
-
-        $this->assertCount(1, $variables);
-        $this->assertArrayHasKey('some_variable', $variables);
     }
 
     /**

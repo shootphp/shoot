@@ -150,8 +150,6 @@ Now, whenever the template is rendered, the presenter will be called to populate
 on its variables to the template.
 
 ## Limitations
-* A presenter is only called if its presentation model does not hold data. This means you should only define fields on
-a presentation model with [empty][link-empty-values] default values, or its presenter will never be called.
 * Do not define a model for templates from which you intend to extend. Due to how Twig renders its templates, it causes
 the presentation model of a child template to be overwritten by its parent. This is probably not what you want. 
 
@@ -172,5 +170,4 @@ The MIT License (MIT). Please see the [license file][link-license] for more info
 [link-changelog]: CHANGELOG.md
 [link-coverage]: https://scrutinizer-ci.com/g/shootphp/shoot/code-structure
 [link-code-quality]: https://scrutinizer-ci.com/g/shootphp/shoot
-[link-empty-values]: https://secure.php.net/empty
 [link-license]: LICENSE.md

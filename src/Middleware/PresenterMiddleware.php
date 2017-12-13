@@ -8,13 +8,11 @@ use Psr\Container\ContainerInterface;
 use Shoot\Shoot\Context;
 use Shoot\Shoot\HasPresenterInterface;
 use Shoot\Shoot\MiddlewareInterface;
-use Shoot\Shoot\PresentationModel;
 use Shoot\Shoot\PresenterInterface;
 use Shoot\Shoot\View;
 
 /**
- * Resolves presenters as defined by presentation models using a PSR-11 compliant DI container. If the model does not
- * contain data, the presenter is invoked to update the model.
+ * Resolves presenters as defined by presentation models using a PSR-11 compliant DI container.
  */
 final class PresenterMiddleware implements MiddlewareInterface
 {
@@ -42,7 +40,7 @@ final class PresenterMiddleware implements MiddlewareInterface
     {
         $presentationModel = $view->getPresentationModel();
 
-        if ($presentationModel instanceof HasPresenterInterface && !$this->hasData($presentationModel)) {
+        if ($presentationModel instanceof HasPresenterInterface) {
             $presenter = $this->loadPresenter($presentationModel);
             $presentationModel = $presenter->present($context, $presentationModel);
             $view = $view->withPresentationModel($presentationModel);
@@ -63,23 +61,5 @@ final class PresenterMiddleware implements MiddlewareInterface
     private function loadPresenter(HasPresenterInterface $hasPresenter): PresenterInterface
     {
         return $this->container->get($hasPresenter->getPresenter());
-    }
-
-    /**
-     * Determine whether the presentation model already holds data.
-     *
-     * @param PresentationModel $presentationModel The presentation model for which to determine whether it holds data.
-     *
-     * @return bool Whether the presentation model already holds data.
-     */
-    private function hasData(PresentationModel $presentationModel): bool
-    {
-        foreach ($presentationModel->getVariables() as $value) {
-            if (!empty($value)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
