@@ -29,7 +29,7 @@ final class ViewFactory
         }
 
         if ($name === '') {
-            $name = 'product.twig';
+            $name = 'item.twig';
         }
 
         return new View($name, $presentationModel, $callback);

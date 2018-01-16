@@ -1,4 +1,5 @@
-{# Assigning multiple models to the same view will cause an exception: #}
-
-{% model 'Shoot\\Shoot\\Tests\\Fixtures\\PresentationModelFixture' %}
-{% model 'Shoot\\Shoot\\Tests\\Fixtures\\ListPresentationModelFixture' %}
+{##
+ # Assigning multiple models to the same view should throw an exception.
+ #}
+{% model 'Shoot\\Shoot\\Tests\\Fixtures\\Item' %}
+{% model 'Shoot\\Shoot\\Tests\\Fixtures\\ItemList' %}

@@ -18,7 +18,7 @@ final class ContextTest extends TestCase
     {
         $this->context = new Context([
             'null_attribute' => null,
-            'string_attribute' => 'value'
+            'string_attribute' => 'value',
         ]);
     }
 

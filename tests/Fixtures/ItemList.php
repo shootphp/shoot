@@ -6,16 +6,16 @@ namespace Shoot\Shoot\Tests\Fixtures;
 use Shoot\Shoot\HasPresenterInterface;
 use Shoot\Shoot\PresentationModel;
 
-final class ProductListPresentationModel extends PresentationModel implements HasPresenterInterface
+final class ItemList extends PresentationModel implements HasPresenterInterface
 {
-    /** @var ProductPresentationModel[] */
-    protected $products = [];
+    /** @var Item[] */
+    protected $items = [];
 
     /**
      * @return string The class name of the presenter for this presentation model.
      */
     public function getPresenter(): string
     {
-        return ProductListPresenter::class;
+        return ItemListPresenter::class;
     }
 }

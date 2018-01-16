@@ -8,8 +8,8 @@ use Shoot\Shoot\Context;
 use Shoot\Shoot\Middleware\PresenterMiddleware;
 use Shoot\Shoot\MiddlewareInterface;
 use Shoot\Shoot\Tests\Fixtures\Container;
+use Shoot\Shoot\Tests\Fixtures\Item;
 use Shoot\Shoot\Tests\Fixtures\MiddlewareCallback;
-use Shoot\Shoot\Tests\Fixtures\ProductPresentationModel;
 use Shoot\Shoot\Tests\Fixtures\ViewFactory;
 
 final class PresenterMiddlewareTest extends TestCase
@@ -38,9 +38,7 @@ final class PresenterMiddlewareTest extends TestCase
      */
     public function testProcessShouldNotLoadPresenterIfPresentationModelHasData()
     {
-        $presentationModel = new ProductPresentationModel([
-            'product_name' => 'ACME Anvil'
-        ]);
+        $presentationModel = new Item(['name' => 'item']);
 
         $view = ViewFactory::create($presentationModel);
 
@@ -54,14 +52,14 @@ final class PresenterMiddlewareTest extends TestCase
      */
     public function testProcessShouldLoadPresenterIfPresentationModelHasPresenterAndDoesNotHaveData()
     {
-        $presentationModel = new ProductPresentationModel();
+        $presentationModel = new Item();
 
         $view = ViewFactory::create($presentationModel);
 
-        $this->assertEmpty($view->getPresentationModel()->getVariables()['product_name']);
+        $this->assertEmpty($view->getPresentationModel()->getVariables()['name']);
 
         $view = $this->middleware->process($view, $this->context, $this->next);
 
-        $this->assertSame('ACME Anvil', $view->getPresentationModel()->getVariables()['product_name']);
+        $this->assertSame('item', $view->getPresentationModel()->getVariables()['name']);
     }
 }

@@ -6,8 +6,8 @@ namespace Shoot\Shoot\Tests\Middleware;
 use PHPUnit\Framework\TestCase;
 use Shoot\Shoot\Context;
 use Shoot\Shoot\Middleware\InspectorMiddleware;
+use Shoot\Shoot\Tests\Fixtures\Item;
 use Shoot\Shoot\Tests\Fixtures\MiddlewareCallback;
-use Shoot\Shoot\Tests\Fixtures\ProductPresentationModel;
 use Shoot\Shoot\Tests\Fixtures\ViewFactory;
 
 final class InspectorMiddlewareTest extends TestCase
@@ -22,7 +22,7 @@ final class InspectorMiddlewareTest extends TestCase
         $context = new Context();
         $middleware = new InspectorMiddleware();
         $next = new MiddlewareCallback();
-        $presentationModel = new ProductPresentationModel();
+        $presentationModel = new Item();
         $view = ViewFactory::create($presentationModel);
 
         $middleware->process($view, $context, $next);

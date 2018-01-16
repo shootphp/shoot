@@ -22,7 +22,7 @@ final class LoggingMiddlewareTest extends TestCase
 
         $logger = new Logger(function ($level, $message, $context) use (&$wasCalled) {
             $this->assertSame(LogLevel::DEBUG, $level);
-            $this->assertSame('product.twig', $message);
+            $this->assertSame('item.twig', $message);
             $this->assertArrayHasKey('presentation_model', $context);
             $this->assertArrayHasKey('time_taken', $context);
             $this->assertArrayHasKey('variables', $context);

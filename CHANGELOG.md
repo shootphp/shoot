@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to Shoot will be documented in this file.
 
+## [Unreleased]
+- Shoot handles embedded templates by passing through all variables from the parent template.
+
 ## [0.2.0] - 2017-12-13
 ### Changed
 - Presenters should check if a presentation model has data for themselves. This is no longer handled by the

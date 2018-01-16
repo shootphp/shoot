@@ -25,7 +25,7 @@ final class TwigIntegrationTest extends TestCase
         $middleware = [new PresenterMiddleware($container)];
         $pipeline = new Pipeline($middleware);
         $loader = new FilesystemLoader([realpath(__DIR__ . '/Fixtures/Templates')]);
-        $this->twig = new Environment($loader, ['strict_variables' => true]);
+        $this->twig = new Environment($loader, ['cache' => false, 'strict_variables' => true]);
         $this->twig->addExtension($pipeline);
     }
 
@@ -36,11 +36,11 @@ final class TwigIntegrationTest extends TestCase
      */
     public function testRenderSingleModel()
     {
-        $output = $this->renderTemplate('product.twig');
+        $output = $this->renderTemplate('item.twig');
 
         $this->assertSame([
-            '## ACME Anvil',
-            'We still have 3 units on stock!'
+            '## item',
+            'description',
         ], $output);
     }
 
@@ -51,16 +51,16 @@ final class TwigIntegrationTest extends TestCase
      */
     public function testRenderListOfModels()
     {
-        $output = $this->renderTemplate('product_list.twig');
+        $output = $this->renderTemplate('item_list.twig');
 
         $this->assertSame([
-            '# Products',
-            '## ACME Piano',
-            'We still have 6 units on stock!',
-            '## ACME Rocket',
-            'Sorry, all out of stock.',
-            '## ACME Hammer',
-            'We still have 17 units on stock!'
+            '# items',
+            '## item 1',
+            'description',
+            '## item 2',
+            'description',
+            '## item 3',
+            'description',
         ], $output);
     }
 
@@ -74,6 +74,21 @@ final class TwigIntegrationTest extends TestCase
         $this->expectExceptionMessage('model has already been assigned');
 
         $this->renderTemplate('duplicate_models.twig');
+    }
+
+    /**
+     * @throws Error
+     *
+     * @return void
+     */
+    public function testEmbeddedTemplatesShouldReceiveAllVariables()
+    {
+        $output = $this->renderTemplate('has_embedded_template.twig');
+
+        $this->assertSame([
+            '# title: item',
+            'description',
+        ], $output);
     }
 
     /**

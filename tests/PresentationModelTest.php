@@ -5,7 +5,7 @@ namespace Shoot\Shoot\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Shoot\Shoot\PresentationModel;
-use Shoot\Shoot\Tests\Fixtures\ProductPresentationModel;
+use Shoot\Shoot\Tests\Fixtures\Item;
 use TypeError;
 
 final class PresentationModelTest extends TestCase
@@ -27,14 +27,14 @@ final class PresentationModelTest extends TestCase
      */
     public function testSpecificPresentationModelsShouldOnlySetDefinedVariables()
     {
-        $presentationModel = new ProductPresentationModel([
-            'product_name' => 'Expect this to be set',
-            'some_other_variable' => 'But not this'
+        $presentationModel = new Item([
+            'name' => 'Expect this to be set',
+            'some_other_variable' => 'But not this',
         ]);
 
         $variables = $presentationModel->getVariables();
 
-        $this->assertArrayHasKey('product_name', $variables);
+        $this->assertArrayHasKey('name', $variables);
         $this->assertArrayNotHasKey('some_other_variable', $variables);
     }
 }

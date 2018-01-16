@@ -6,7 +6,7 @@ namespace Shoot\Shoot\Tests;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Shoot\Shoot\PresentationModel;
-use Shoot\Shoot\Tests\Fixtures\ProductPresentationModel;
+use Shoot\Shoot\Tests\Fixtures\Item;
 use Shoot\Shoot\Tests\Fixtures\ViewCallback;
 use Shoot\Shoot\Tests\Fixtures\ViewFactory;
 use Shoot\Shoot\View;
@@ -52,7 +52,7 @@ final class ViewTest extends TestCase
     {
         $originalView = ViewFactory::create();
 
-        $presentationModel = new ProductPresentationModel();
+        $presentationModel = new Item();
         $updatedView = $originalView->withPresentationModel($presentationModel);
 
         $this->assertNotSame($originalView, $updatedView);

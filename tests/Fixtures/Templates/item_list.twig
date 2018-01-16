@@ -1,0 +1,7 @@
+{% model 'Shoot\\Shoot\\Tests\\Fixtures\\ItemList' %}
+# items
+{% for item in items %}
+    {% if item is model %}
+        {% include 'item.twig' with item|variables %}
+    {% endif %}
+{% endfor %}

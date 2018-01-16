@@ -5,6 +5,7 @@ namespace Shoot\Shoot\Twig\Node;
 
 use Twig_Compiler as Compiler;
 use Twig_Node as Node;
+use Twig_Node_Module as ModuleNode;
 
 /**
  * This node is added to the top of the display method of a Twig template and is used by Shoot to wrap its contents in
@@ -15,16 +16,22 @@ final class DisplayStartNode extends Node
     /** @var FindPresentationModelInterface */
     private $findPresentationModel;
 
+    /** @var ModuleNode */
+    private $module;
+
     /**
-     * @param string                         $templateName
+     * @param ModuleNode                     $module
      * @param FindPresentationModelInterface $findPresentationModel
      */
-    public function __construct(string $templateName, FindPresentationModelInterface $findPresentationModel)
+    public function __construct(ModuleNode $module, FindPresentationModelInterface $findPresentationModel)
     {
         parent::__construct();
 
-        $this->setTemplateName($templateName);
+        $this->module = $module;
         $this->findPresentationModel = $findPresentationModel;
+
+        $this->setTemplateName($module->getTemplateName());
+
     }
 
     /**
@@ -34,6 +41,10 @@ final class DisplayStartNode extends Node
      */
     public function compile(Compiler $compiler)
     {
+        if ($this->module->hasAttribute('is_embedded')) {
+            return;
+        }
+
         $presentationModel = $this->findPresentationModel->for($this->getTemplateName());
 
         $compiler

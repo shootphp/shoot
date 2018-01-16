@@ -7,6 +7,7 @@ use Shoot\Shoot\Pipeline;
 use Shoot\Shoot\View;
 use Twig_Compiler as Compiler;
 use Twig_Node as Node;
+use Twig_Node_Module as ModuleNode;
 
 /**
  * This node is added to the bottom of the display method of a Twig template and is used by Shoot to wrap its contents
@@ -14,14 +15,19 @@ use Twig_Node as Node;
  */
 final class DisplayEndNode extends Node
 {
+    /** @var ModuleNode */
+    private $module;
+
     /**
-     * @param string $templateName
+     * @param ModuleNode $module
      */
-    public function __construct(string $templateName)
+    public function __construct(ModuleNode $module)
     {
         parent::__construct();
 
-        $this->setTemplateName($templateName);
+        $this->module = $module;
+
+        $this->setTemplateName($module->getTemplateName());
     }
 
     /**
@@ -31,6 +37,10 @@ final class DisplayEndNode extends Node
      */
     public function compile(Compiler $compiler)
     {
+        if ($this->module->hasAttribute('is_embedded')) {
+            return;
+        }
+
         $pipeline = Pipeline::class;
         $templateName = $this->getTemplateName();
         $view = View::class;

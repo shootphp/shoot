@@ -8,7 +8,7 @@ use Shoot\Shoot\HasDataTrait;
 use Shoot\Shoot\PresentationModel;
 use Shoot\Shoot\PresenterInterface;
 
-final class ProductPresenter implements PresenterInterface
+final class ItemPresenter implements PresenterInterface
 {
     use HasDataTrait;
 
@@ -20,14 +20,13 @@ final class ProductPresenter implements PresenterInterface
      */
     public function present(Context $context, PresentationModel $presentationModel): PresentationModel
     {
-        if ($this->hasData($presentationModel)) {
-            return $presentationModel;
+        if (!$this->hasData($presentationModel)) {
+            $presentationModel = $presentationModel->withVariables([
+                'name' => 'item',
+                'description' => 'description',
+            ]);
         }
 
-        return $presentationModel->withVariables([
-            'product_name' => 'ACME Anvil',
-            'stock_quantity' => 3,
-            'on_stock' => true
-        ]);
+        return $presentationModel;
     }
 }
