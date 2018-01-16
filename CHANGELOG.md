@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to Shoot will be documented in this file.
 
-## [Unreleased]
+## [0.2.1] - 2018-01-16
 - Shoot handles embedded templates by passing through all variables from the parent template.
 
 ## [0.2.0] - 2017-12-13

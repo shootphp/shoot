@@ -158,7 +158,7 @@ Please see the [changelog][link-changelog] for more information on what has chan
 
 ## Testing
 ``` bash
-$ composer test
+$ composer run-script test
 ```
 
 ## License

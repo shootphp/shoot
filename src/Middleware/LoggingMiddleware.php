@@ -43,7 +43,7 @@ final class LoggingMiddleware implements MiddlewareInterface
         $fields = [
             'presentation_model' => $presentationModel->getName(),
             'time_taken' => sprintf("%f seconds", $endTime - $startTime),
-            'variables' => $presentationModel->getVariables()
+            'variables' => $presentationModel->getVariables(),
         ];
 
         $this->logger->debug($view->getName(), $fields);

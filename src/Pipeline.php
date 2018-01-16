@@ -118,7 +118,7 @@ final class Pipeline implements ContextInterface, ExtensionInterface
         return [
             new TwigFilter('variables', function (PresentationModel $presentationModel): array {
                 return $presentationModel->getVariables();
-            })
+            }),
         ];
     }
 
@@ -162,7 +162,7 @@ final class Pipeline implements ContextInterface, ExtensionInterface
         return [
             new TwigTest('model', function ($value): bool {
                 return $value instanceof PresentationModel;
-            })
+            }),
         ];
     }
 
