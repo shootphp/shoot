@@ -12,9 +12,9 @@ use Twig_NodeVisitorInterface as NodeVisitorInterface;
 use Twig_Test as TwigTest;
 use Twig_TokenParserInterface as TokenParserInterface;
 
-final class Pipeline implements ContextInterface, ExtensionInterface
+final class Pipeline implements ExtensionInterface, PipelineInterface
 {
-    /** @var Context */
+    /** @var ContextInterface */
     private $context;
 
     /** @var callable */
@@ -53,37 +53,14 @@ final class Pipeline implements ContextInterface, ExtensionInterface
     }
 
     /**
-     * Apply the given context attributes to the pipeline.
+     * Applies the given context to the pipeline, executes the given callback, and clears the context.
      *
-     * @param mixed[] $context
-     *
-     * @return void
-     */
-    public function applyContext(array $context)
-    {
-        $this->context = new Context($context);
-    }
-
-    /**
-     * Clear the current context.
-     *
-     * @return void
-     */
-    public function clearContext()
-    {
-        $this->applyContext([]);
-    }
-
-    /**
-     * Applies the given context to the pipeline, executes the given callback, and clears the context. This method
-     * exists merely for convenience.
-     *
-     * @param mixed[]  $context
-     * @param callable $callback
+     * @param ContextInterface $context
+     * @param callable         $callback
      *
      * @return mixed The result as returned by the callback (if any).
      */
-    public function withContext(array $context, callable $callback)
+    public function withContext(ContextInterface $context, callable $callback)
     {
         try {
             $this->applyContext($context);
@@ -92,6 +69,28 @@ final class Pipeline implements ContextInterface, ExtensionInterface
         } finally {
             $this->clearContext();
         }
+    }
+
+    /**
+     * Apply the given context attributes to the pipeline.
+     *
+     * @param ContextInterface $context
+     *
+     * @return void
+     */
+    private function applyContext(ContextInterface $context)
+    {
+        $this->context = $context;
+    }
+
+    /**
+     * Clear the current context.
+     *
+     * @return void
+     */
+    private function clearContext()
+    {
+        $this->applyContext(new Context());
     }
 
     /**

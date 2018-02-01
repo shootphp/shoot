@@ -5,7 +5,7 @@ namespace Shoot\Shoot\Middleware;
 
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
-use Shoot\Shoot\Context;
+use Shoot\Shoot\ContextInterface;
 use Shoot\Shoot\HasPresenterInterface;
 use Shoot\Shoot\MiddlewareInterface;
 use Shoot\Shoot\PresenterInterface;
@@ -28,15 +28,14 @@ final class PresenterMiddleware implements MiddlewareInterface
     }
 
     /**
-     * @param View     $view    The view to be processed by this middleware.
-     * @param Context  $context The context in which to process the view.
-     * @param callable $next    The next middleware to call
+     * @param View             $view    The view to be processed by this middleware.
+     * @param ContextInterface $context The context in which to process the view.
+     * @param callable         $next    The next middleware to call
      *
      * @throws ContainerExceptionInterface
-     *
      * @return View The processed view.
      */
-    public function process(View $view, Context $context, callable $next): View
+    public function process(View $view, ContextInterface $context, callable $next): View
     {
         $presentationModel = $view->getPresentationModel();
 

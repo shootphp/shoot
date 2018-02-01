@@ -59,7 +59,7 @@ available to all middleware and presenters. You'll see how it's used further dow
 
 ```php
 $app->get('/posts/{post_id}', function ($request, $response) {
-    $context = [ServerRequestInterface::class => $request];
+    $context = new Context([ServerRequestInterface::class => $request]);
 
     return $this
         ->get(Pipeline::class)

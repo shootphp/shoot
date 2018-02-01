@@ -6,7 +6,7 @@ namespace Shoot\Shoot;
 /**
  * Provides the context in which middleware processes a view.
  */
-final class Context
+final class Context implements ContextInterface
 {
     /** @var mixed[] */
     private $attributes;
@@ -28,13 +28,5 @@ final class Context
     public function getAttribute(string $name, $default = null)
     {
         return $this->attributes[$name] ?? $default;
-    }
-
-    /**
-     * @return mixed[] All attributes available in the context.
-     */
-    public function getAttributes(): array
-    {
-        return $this->attributes;
     }
 }

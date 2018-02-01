@@ -33,14 +33,6 @@ final class ContextTest extends TestCase
     /**
      * @return void
      */
-    public function testGetAttributesShouldReturnAllAttributes()
-    {
-        $this->assertCount(2, $this->context->getAttributes());
-    }
-
-    /**
-     * @return void
-     */
     public function testGetAttributeShouldReturnValueIfAttributeExists()
     {
         $this->assertSame('value', $this->context->getAttribute('string_attribute'));

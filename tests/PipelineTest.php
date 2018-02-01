@@ -67,8 +67,9 @@ final class PipelineTest extends TestCase
         });
 
         $pipeline = new Pipeline([$middleware]);
+        $context = new Context(['string_attribute' => 'value']);
 
-        $pipeline->withContext(['string_attribute' => 'value'], function () use ($pipeline, $view) {
+        $pipeline->withContext($context, function () use ($pipeline, $view) {
             $pipeline->process($view);
         });
 
@@ -96,6 +97,8 @@ final class PipelineTest extends TestCase
 
         $filter = array_shift($filters);
         $callback = $filter->getCallable();
+
+        /** @var mixed[] $variables */
         $variables = $callback($presentationModel);
 
         $this->assertInternalType('array', $variables);

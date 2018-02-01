@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to Shoot will be documented in this file.
 
+## [0.3.0] - 2018-02-01
+- Context is now interfaced, in preparation of the Shoot/Http package. This package will make use of Shoot in an HTTP
+context (PSR-7 and PSR-15) easier.
+
 ## [0.2.1] - 2018-01-16
 - Shoot handles embedded templates by passing through all variables from the parent template.
 
