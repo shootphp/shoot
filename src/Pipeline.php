@@ -14,7 +14,7 @@ use Twig_TokenParserInterface as TokenParserInterface;
 
 final class Pipeline implements ExtensionInterface, PipelineInterface
 {
-    /** @var ContextInterface */
+    /** @var mixed */
     private $context;
 
     /** @var callable */
@@ -55,12 +55,12 @@ final class Pipeline implements ExtensionInterface, PipelineInterface
     /**
      * Applies the given context to the pipeline, executes the given callback, and clears the context.
      *
-     * @param ContextInterface $context
-     * @param callable         $callback
+     * @param mixed    $context
+     * @param callable $callback
      *
      * @return mixed The result as returned by the callback (if any).
      */
-    public function withContext(ContextInterface $context, callable $callback)
+    public function withContext($context, callable $callback)
     {
         try {
             $this->applyContext($context);
@@ -72,13 +72,13 @@ final class Pipeline implements ExtensionInterface, PipelineInterface
     }
 
     /**
-     * Apply the given context attributes to the pipeline.
+     * Apply the given context to the pipeline.
      *
-     * @param ContextInterface $context
+     * @param mixed $context
      *
      * @return void
      */
-    private function applyContext(ContextInterface $context)
+    private function applyContext($context)
     {
         $this->context = $context;
     }
@@ -90,7 +90,7 @@ final class Pipeline implements ExtensionInterface, PipelineInterface
      */
     private function clearContext()
     {
-        $this->applyContext(new Context());
+        $this->applyContext(null);
     }
 
     /**

@@ -6,10 +6,10 @@ namespace Shoot\Shoot;
 interface PresenterInterface
 {
     /**
-     * @param ContextInterface  $context
+     * @param mixed             $context
      * @param PresentationModel $presentationModel
      *
      * @return PresentationModel
      */
-    public function present(ContextInterface $context, PresentationModel $presentationModel): PresentationModel;
+    public function present($context, PresentationModel $presentationModel): PresentationModel;
 }

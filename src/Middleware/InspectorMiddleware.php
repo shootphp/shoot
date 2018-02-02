@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Middleware;
 
-use Shoot\Shoot\ContextInterface;
 use Shoot\Shoot\HasPresenterInterface;
 use Shoot\Shoot\MiddlewareInterface;
 use Shoot\Shoot\PresentationModel;
@@ -16,13 +15,13 @@ use Shoot\Shoot\View;
 final class InspectorMiddleware implements MiddlewareInterface
 {
     /**
-     * @param View             $view    The view to be processed by this middleware.
-     * @param ContextInterface $context The context in which to process the view.
-     * @param callable         $next    The next middleware to call
+     * @param View     $view    The view to be processed by this middleware.
+     * @param mixed    $context The context in which to process the view.
+     * @param callable $next    The next middleware to call
      *
      * @return View The processed view.
      */
-    public function process(View $view, ContextInterface $context, callable $next): View
+    public function process(View $view, $context, callable $next): View
     {
         $this->script();
         $this->view($view);
