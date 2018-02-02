@@ -5,7 +5,6 @@ namespace Shoot\Shoot\Tests\Middleware;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
-use Shoot\Shoot\Context;
 use Shoot\Shoot\Middleware\LoggingMiddleware;
 use Shoot\Shoot\Tests\Fixtures\Logger;
 use Shoot\Shoot\Tests\Fixtures\MiddlewareCallback;
@@ -30,12 +29,11 @@ final class LoggingMiddlewareTest extends TestCase
             $wasCalled = true;
         });
 
-        $context = new Context();
         $middleware = new LoggingMiddleware($logger);
         $next = new MiddlewareCallback();
         $view = ViewFactory::create();
 
-        $middleware->process($view, $context, $next);
+        $middleware->process($view, null, $next);
 
         $this->assertTrue($wasCalled);
     }

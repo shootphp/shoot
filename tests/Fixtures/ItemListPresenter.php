@@ -3,19 +3,18 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Tests\Fixtures;
 
-use Shoot\Shoot\ContextInterface;
 use Shoot\Shoot\PresentationModel;
 use Shoot\Shoot\PresenterInterface;
 
 final class ItemListPresenter implements PresenterInterface
 {
     /**
-     * @param ContextInterface  $context
+     * @param mixed             $context
      * @param PresentationModel $presentationModel
      *
      * @return PresentationModel
      */
-    public function present(ContextInterface $context, PresentationModel $presentationModel): PresentationModel
+    public function present($context, PresentationModel $presentationModel): PresentationModel
     {
         return $presentationModel->withVariables([
             'items' => [

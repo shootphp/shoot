@@ -8,7 +8,6 @@ use Shoot\Shoot\Middleware\PresenterMiddleware;
 use Shoot\Shoot\Pipeline;
 use Shoot\Shoot\Tests\Fixtures\Container;
 use Twig_Environment as Environment;
-use Twig_Error as Error;
 use Twig_Loader_Filesystem as FilesystemLoader;
 
 final class TwigIntegrationTest extends TestCase
@@ -30,8 +29,6 @@ final class TwigIntegrationTest extends TestCase
     }
 
     /**
-     * @throws Error
-     *
      * @return void
      */
     public function testRenderSingleModel()
@@ -45,8 +42,6 @@ final class TwigIntegrationTest extends TestCase
     }
 
     /**
-     * @throws Error
-     *
      * @return void
      */
     public function testRenderListOfModels()
@@ -65,8 +60,6 @@ final class TwigIntegrationTest extends TestCase
     }
 
     /**
-     * @throws Error
-     *
      * @return void
      */
     public function testAssigningMultipleModelsToAViewShouldThrowAnException()
@@ -77,8 +70,6 @@ final class TwigIntegrationTest extends TestCase
     }
 
     /**
-     * @throws Error
-     *
      * @return void
      */
     public function testEmbeddedTemplatesShouldReceiveAllVariables()
@@ -93,8 +84,6 @@ final class TwigIntegrationTest extends TestCase
 
     /**
      * @param string $template
-     *
-     * @throws Error
      *
      * @return string[]
      */

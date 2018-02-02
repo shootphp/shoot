@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Tests\Fixtures;
 
-use Shoot\Shoot\ContextInterface;
 use Shoot\Shoot\MiddlewareInterface;
 use Shoot\Shoot\View;
 
@@ -21,13 +20,13 @@ final class Middleware implements MiddlewareInterface
     }
 
     /**
-     * @param View             $view
-     * @param ContextInterface $context
-     * @param callable         $next
+     * @param View     $view
+     * @param mixed    $context
+     * @param callable $next
      *
      * @return View
      */
-    public function process(View $view, ContextInterface $context, callable $next = null): View
+    public function process(View $view, $context, callable $next = null): View
     {
         if ($next === null) {
             $next = function (View $view): View {

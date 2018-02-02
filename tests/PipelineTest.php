@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Shoot\Shoot\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Shoot\Shoot\Context;
 use Shoot\Shoot\Pipeline;
 use Shoot\Shoot\PresentationModel;
 use Shoot\Shoot\Tests\Fixtures\Middleware;
@@ -62,12 +61,12 @@ final class PipelineTest extends TestCase
 
         $view = ViewFactory::create();
 
-        $middleware = new Middleware(function (View $view, Context $context) use (&$hadContext) {
-            $hadContext = $context->getAttribute('string_attribute', '') !== '';
+        $middleware = new Middleware(function (View $view, $context) use (&$hadContext) {
+            $hadContext = ($context['string_attribute'] ?? '') !== '';
         });
 
         $pipeline = new Pipeline([$middleware]);
-        $context = new Context(['string_attribute' => 'value']);
+        $context = ['string_attribute' => 'value'];
 
         $pipeline->withContext($context, function () use ($pipeline, $view) {
             $pipeline->process($view);
