@@ -59,11 +59,9 @@ available to all middleware and presenters. You'll see how it's used further dow
 
 ```php
 $app->get('/posts/{post_id}', function ($request, $response) {
-    $context = new Context([ServerRequestInterface::class => $request]);
-
     return $this
         ->get(Pipeline::class)
-        ->withContext($context, function () use ($response) {
+        ->withContext($request, function () use ($response) {
             return $this->view->render($response, 'post.twig');
         });
 });
@@ -124,7 +122,7 @@ final class PostPresenter implements PresenterInterface
         $this->router = $router;
     }
 
-    public function present(Context $context, PresentationModel $presentationModel): PresentationModel
+    public function present($context, PresentationModel $presentationModel): PresentationModel
     {
         $request = $context->getAttribute(ServerRequestInterface::class);
         $postId = $request->getAttribute('post_id', '');

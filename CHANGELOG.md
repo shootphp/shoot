@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to Shoot will be documented in this file.
 
+## [0.4.0] - 2018-02-05
+- Removed Context type entirely. We'll have to settle for typing through PHPDoc, until maybe we one day have generics.
+
 ## [0.3.0] - 2018-02-01
 - Context is now interfaced, in preparation of the Shoot/Http package. This package will make use of Shoot in an HTTP
 context (PSR-7 and PSR-15) easier.
