@@ -9,7 +9,7 @@ namespace Shoot\Shoot;
 interface HasPresenterInterface
 {
     /**
-     * @return string The class name of the presenter for this presentation model.
+     * @return string The name by which to resolve the presenter through the DI container.
      */
-    public function getPresenter(): string;
+    public function getPresenterName(): string;
 }

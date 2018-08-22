@@ -17,7 +17,7 @@ final class Item extends PresentationModel implements HasPresenterInterface
     /**
      * @return string The class name of the presenter for this presentation model.
      */
-    public function getPresenter(): string
+    public function getPresenterName(): string
     {
         return ItemPresenter::class;
     }

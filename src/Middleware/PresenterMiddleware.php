@@ -58,6 +58,6 @@ final class PresenterMiddleware implements MiddlewareInterface
      */
     private function loadPresenter(HasPresenterInterface $hasPresenter): PresenterInterface
     {
-        return $this->container->get($hasPresenter->getPresenter());
+        return $this->container->get($hasPresenter->getPresenterName());
     }
 }

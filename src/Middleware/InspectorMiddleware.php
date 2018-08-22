@@ -141,7 +141,7 @@ final class InspectorMiddleware implements MiddlewareInterface
         $this->value($presentationModel->getName(), 'name');
 
         if ($presentationModel instanceof HasPresenterInterface) {
-            $this->value($presentationModel->getPresenter(), 'presenter');
+            $this->value($presentationModel->getPresenterName(), 'presenter');
         }
 
         $this->iterable($presentationModel->getVariables(), 'variables');
