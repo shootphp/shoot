@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Twig\Node;
 
-use Shoot\Shoot\Pipeline;
+use Shoot\Shoot\Extension;
 use Shoot\Shoot\View;
 use Twig_Compiler as Compiler;
 use Twig_Node as Node;
@@ -41,7 +41,7 @@ final class DisplayEndNode extends Node
             return;
         }
 
-        $pipeline = Pipeline::class;
+        $extension = Extension::class;
         $templateName = $this->getTemplateName();
         $view = View::class;
 
@@ -50,7 +50,7 @@ final class DisplayEndNode extends Node
             ->write("};\n\n")
             ->write("\$this->env\n")
             ->indent()
-            ->write("->getExtension({$pipeline}::class)\n")
+            ->write("->getExtension({$extension}::class)\n")
             ->write("->process(new {$view}('{$templateName}', \$presentationModel, \$callback));\n")
             ->outdent();
     }

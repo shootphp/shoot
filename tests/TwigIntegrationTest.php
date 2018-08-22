@@ -5,16 +5,16 @@ namespace Shoot\Shoot\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
+use Shoot\Shoot\Extension;
 use Shoot\Shoot\Middleware\PresenterMiddleware;
 use Shoot\Shoot\Pipeline;
-use Shoot\Shoot\PipelineInterface;
 use Shoot\Shoot\Tests\Fixtures\Container;
 use Twig_Environment as Environment;
 use Twig_Loader_Filesystem as FilesystemLoader;
 
 final class TwigIntegrationTest extends TestCase
 {
-    /** @var PipelineInterface */
+    /** @var Pipeline */
     private $pipeline;
 
     /** @var Environment */
@@ -27,10 +27,11 @@ final class TwigIntegrationTest extends TestCase
     {
         $container = new Container();
         $pipeline = new Pipeline([new PresenterMiddleware($container)]);
+        $extension = new Extension($pipeline);
 
         $loader = new FilesystemLoader([realpath(__DIR__ . '/Fixtures/Templates')]);
         $twig = new Environment($loader, ['cache' => false, 'strict_variables' => true]);
-        $twig->addExtension($pipeline);
+        $twig->addExtension($extension);
 
         $this->pipeline = $pipeline;
         $this->twig = $twig;

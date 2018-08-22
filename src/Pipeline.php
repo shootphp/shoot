@@ -4,16 +4,8 @@ declare(strict_types=1);
 namespace Shoot\Shoot;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Shoot\Shoot\Twig\NodeVisitor\ModelNodeVisitor;
-use Shoot\Shoot\Twig\TokenParser\ModelTokenParser;
-use Twig_ExtensionInterface as ExtensionInterface;
-use Twig_Filter as TwigFilter;
-use Twig_Function as TwigFunction;
-use Twig_NodeVisitorInterface as NodeVisitorInterface;
-use Twig_Test as TwigTest;
-use Twig_TokenParserInterface as TokenParserInterface;
 
-final class Pipeline implements ExtensionInterface, PipelineInterface
+final class Pipeline
 {
     /** @var callable */
     private $middleware;
@@ -27,28 +19,6 @@ final class Pipeline implements ExtensionInterface, PipelineInterface
     public function __construct(array $middleware = [])
     {
         $this->middleware = $this->chainMiddleware($middleware);
-    }
-
-    /**
-     * Chains the middleware into a single callable.
-     *
-     * @param MiddlewareInterface[] $middleware
-     *
-     * @return callable
-     */
-    private function chainMiddleware(array $middleware): callable
-    {
-        $middleware = array_reverse($middleware);
-
-        return array_reduce($middleware, function (callable $next, MiddlewareInterface $middleware) {
-            return function (View $view) use ($middleware, $next): View {
-                return $middleware->process($view, $this->request, $next);
-            };
-        }, function (View $view): View {
-            $view->render();
-
-            return $view;
-        });
     }
 
     /**
@@ -72,83 +42,38 @@ final class Pipeline implements ExtensionInterface, PipelineInterface
     }
 
     /**
-     * @internal This method is used by the compiled Twig templates to access the pipeline. It should not be used
-     * directly.
-     *
      * @param View $view
      *
      * @return void
      */
     public function process(View $view)
     {
+        if ($this->request === null) {
+            throw new MissingRequestException('Cannot process a view without a request set. This method should be called from the callback passed to Pipeline::withRequest');
+        }
+
         call_user_func($this->middleware, $view);
     }
 
     /**
-     * Returns a list of filters to add to the existing list.
+     * Chains the middleware into a single callable.
      *
-     * @return TwigFilter[]
+     * @param MiddlewareInterface[] $middleware
+     *
+     * @return callable
      */
-    public function getFilters(): array
+    private function chainMiddleware(array $middleware): callable
     {
-        return [
-            new TwigFilter('variables', function (PresentationModel $presentationModel): array {
-                return $presentationModel->getVariables();
-            }),
-        ];
-    }
+        $middleware = array_reverse($middleware);
 
-    /**
-     * Returns a list of functions to add to the existing list.
-     *
-     * @return TwigFunction[]
-     */
-    public function getFunctions(): array
-    {
-        return [];
-    }
+        return array_reduce($middleware, function (callable $next, MiddlewareInterface $middleware) {
+            return function (View $view) use ($middleware, $next): View {
+                return $middleware->process($view, $this->request, $next);
+            };
+        }, function (View $view): View {
+            $view->render();
 
-    /**
-     * Returns the node visitor instances to add to the existing list.
-     *
-     * @return NodeVisitorInterface[]
-     */
-    public function getNodeVisitors(): array
-    {
-        return [new ModelNodeVisitor()];
-    }
-
-    /**
-     * Returns a list of operators to add to the existing list.
-     *
-     * @return array[] First array of unary operators, second array of binary operators
-     */
-    public function getOperators(): array
-    {
-        return [];
-    }
-
-    /**
-     * Returns a list of tests to add to the existing list.
-     *
-     * @return TwigTest[]
-     */
-    public function getTests(): array
-    {
-        return [
-            new TwigTest('model', function ($value): bool {
-                return $value instanceof PresentationModel;
-            }),
-        ];
-    }
-
-    /**
-     * Returns the token parser instances to add to the existing list.
-     *
-     * @return TokenParserInterface[]
-     */
-    public function getTokenParsers(): array
-    {
-        return [new ModelTokenParser()];
+            return $view;
+        });
     }
 }
