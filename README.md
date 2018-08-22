@@ -54,14 +54,14 @@ $pipeline = new Pipeline([new PresenterMiddleware($container)]);
 $twig->addExtension($pipeline);
 ```
 
-Below you'll find a request handler serving blog posts. Note the context being set for the pipeline. This context is
-available to all middleware and presenters. You'll see how it's used further down.
+Below you'll find a request handler serving blog posts. Note the current request being set for the pipeline. The
+request is available to all middleware and presenters. You'll see how it's used further down.
 
 ```php
 $app->get('/posts/{post_id}', function ($request, $response) {
     return $this
         ->get(Pipeline::class)
-        ->withContext($request, function () use ($response) {
+        ->withRequest($request, function () use ($response) {
             return $this->view->render($response, 'post.twig');
         });
 });
@@ -122,9 +122,8 @@ final class PostPresenter implements PresenterInterface
         $this->router = $router;
     }
 
-    public function present($context, PresentationModel $presentationModel): PresentationModel
+    public function present(ServerRequestInterface $request, PresentationModel $presentationModel): PresentationModel
     {
-        $request = $context->getAttribute(ServerRequestInterface::class);
         $postId = $request->getAttribute('post_id', '');
 
         $post = $this->fetchPost($postId);

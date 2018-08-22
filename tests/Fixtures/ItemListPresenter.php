@@ -3,18 +3,19 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Tests\Fixtures;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Shoot\Shoot\PresentationModel;
 use Shoot\Shoot\PresenterInterface;
 
 final class ItemListPresenter implements PresenterInterface
 {
     /**
-     * @param mixed             $context
-     * @param PresentationModel $presentationModel
+     * @param ServerRequestInterface $request           The current HTTP request being handled.
+     * @param PresentationModel      $presentationModel The presentation model for the view being rendered.
      *
-     * @return PresentationModel
+     * @return PresentationModel The populated presentation model.
      */
-    public function present($context, PresentationModel $presentationModel): PresentationModel
+    public function present(ServerRequestInterface $request, PresentationModel $presentationModel): PresentationModel
     {
         return $presentationModel->withVariables([
             'items' => [

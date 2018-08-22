@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Shoot\Shoot\Twig\NodeVisitor\ModelNodeVisitor;
 use Shoot\Shoot\Twig\TokenParser\ModelTokenParser;
 use Twig_ExtensionInterface as ExtensionInterface;
@@ -14,11 +15,11 @@ use Twig_TokenParserInterface as TokenParserInterface;
 
 final class Pipeline implements ExtensionInterface, PipelineInterface
 {
-    /** @var mixed */
-    private $context;
-
     /** @var callable */
     private $middleware;
+
+    /** @var ServerRequestInterface */
+    private $request;
 
     /**
      * @param MiddlewareInterface[] $middleware
@@ -26,8 +27,6 @@ final class Pipeline implements ExtensionInterface, PipelineInterface
     public function __construct(array $middleware = [])
     {
         $this->middleware = $this->chainMiddleware($middleware);
-
-        $this->clearContext();
     }
 
     /**
@@ -43,7 +42,7 @@ final class Pipeline implements ExtensionInterface, PipelineInterface
 
         return array_reduce($middleware, function (callable $next, MiddlewareInterface $middleware) {
             return function (View $view) use ($middleware, $next): View {
-                return $middleware->process($view, $this->context, $next);
+                return $middleware->process($view, $this->request, $next);
             };
         }, function (View $view): View {
             $view->render();
@@ -53,44 +52,23 @@ final class Pipeline implements ExtensionInterface, PipelineInterface
     }
 
     /**
-     * Applies the given context to the pipeline, executes the given callback, and clears the context.
+     * During the execution of the callback, any middleware in the pipeline will have access to the given request
+     * object.
      *
-     * @param mixed    $context
-     * @param callable $callback
+     * @param ServerRequestInterface $request  The current HTTP request being handled.
+     * @param callable               $callback A callback which should call Twig to render the root template.
      *
      * @return mixed The result as returned by the callback (if any).
      */
-    public function withContext($context, callable $callback)
+    public function withRequest(ServerRequestInterface $request, callable $callback)
     {
         try {
-            $this->applyContext($context);
+            $this->request = $request;
 
             return $callback();
         } finally {
-            $this->clearContext();
+            $this->request = null;
         }
-    }
-
-    /**
-     * Apply the given context to the pipeline.
-     *
-     * @param mixed $context
-     *
-     * @return void
-     */
-    private function applyContext($context)
-    {
-        $this->context = $context;
-    }
-
-    /**
-     * Clear the current context.
-     *
-     * @return void
-     */
-    private function clearContext()
-    {
-        $this->applyContext(null);
     }
 
     /**
@@ -107,7 +85,6 @@ final class Pipeline implements ExtensionInterface, PipelineInterface
     }
 
     /**
-     *§
      * Returns a list of filters to add to the existing list.
      *
      * @return TwigFilter[]

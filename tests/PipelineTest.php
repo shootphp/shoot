@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Shoot\Shoot\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ServerRequestInterface;
+use Shoot\Shoot\MiddlewareInterface;
 use Shoot\Shoot\Pipeline;
 use Shoot\Shoot\PresentationModel;
 use Shoot\Shoot\Tests\Fixtures\Middleware;
@@ -14,6 +16,32 @@ use Twig_Test as TwigTest;
 
 final class PipelineTest extends TestCase
 {
+    /** @var ServerRequestInterface */
+    private $request;
+
+    /**
+     * @return void
+     */
+    protected function setUp()
+    {
+        $this->request = $this->prophesize(ServerRequestInterface::class)->reveal();
+    }
+
+    /**
+     * @param View $view
+     * @param MiddlewareInterface[] $middleware
+     *
+     * @return mixed
+     */
+    private function passThroughPipeline(View $view, array $middleware = [])
+    {
+        $pipeline = new Pipeline($middleware);
+
+        return $pipeline->withRequest($this->request, function () use ($pipeline, $view) {
+            $pipeline->process($view);
+        });
+    }
+
     /**
      * @return void
      */
@@ -25,11 +53,9 @@ final class PipelineTest extends TestCase
             $wasCalled = true;
         });
 
-        $pipeline = new Pipeline([$middleware]);
-
         $view = ViewFactory::create();
 
-        $pipeline->process($view);
+        $this->passThroughPipeline($view, [$middleware]);
 
         $this->assertTrue($wasCalled);
     }
@@ -47,36 +73,13 @@ final class PipelineTest extends TestCase
             $wasCalled = true;
         });
 
-        $pipeline->process($view);
-
-        $this->assertTrue($wasCalled);
-    }
-
-    /**
-     * @return void
-     */
-    public function testWithContextShouldClearContext()
-    {
-        $hadContext = false;
-
-        $view = ViewFactory::create();
-
-        $middleware = new Middleware(function (View $view, $context) use (&$hadContext) {
-            $hadContext = ($context['string_attribute'] ?? '') !== '';
-        });
-
-        $pipeline = new Pipeline([$middleware]);
-        $context = ['string_attribute' => 'value'];
-
-        $pipeline->withContext($context, function () use ($pipeline, $view) {
+        $pipeline->withRequest($this->request, function () use ($pipeline, $view) {
             $pipeline->process($view);
         });
 
-        $this->assertTrue($hadContext);
-
         $pipeline->process($view);
 
-        $this->assertFalse($hadContext);
+        $this->assertTrue($wasCalled);
     }
 
     /**

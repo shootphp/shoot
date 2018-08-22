@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Tests\Fixtures;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Shoot\Shoot\MiddlewareInterface;
 use Shoot\Shoot\View;
 
@@ -20,13 +21,13 @@ final class Middleware implements MiddlewareInterface
     }
 
     /**
-     * @param View     $view
-     * @param mixed    $context
-     * @param callable $next
+     * @param View                   $view    The view to be processed by this middleware.
+     * @param ServerRequestInterface $request The current HTTP request being handled.
+     * @param callable               $next    The next middleware to call.
      *
-     * @return View
+     * @return View The processed view.
      */
-    public function process(View $view, $context, callable $next = null): View
+    public function process(View $view, ServerRequestInterface $request, callable $next = null): View
     {
         if ($next === null) {
             $next = function (View $view): View {
@@ -34,6 +35,6 @@ final class Middleware implements MiddlewareInterface
             };
         }
 
-        return call_user_func($this->callable, $view, $context, $next) ?? $view;
+        return call_user_func($this->callable, $view, $request, $next) ?? $view;
     }
 }

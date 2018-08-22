@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Tests\Fixtures;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Shoot\Shoot\HasDataTrait;
 use Shoot\Shoot\PresentationModel;
 use Shoot\Shoot\PresenterInterface;
@@ -12,12 +13,12 @@ final class ItemPresenter implements PresenterInterface
     use HasDataTrait;
 
     /**
-     * @param mixed             $context
-     * @param PresentationModel $presentationModel
+     * @param ServerRequestInterface $request           The current HTTP request being handled.
+     * @param PresentationModel      $presentationModel The presentation model for the view being rendered.
      *
-     * @return PresentationModel
+     * @return PresentationModel The populated presentation model.
      */
-    public function present($context, PresentationModel $presentationModel): PresentationModel
+    public function present(ServerRequestInterface $request, PresentationModel $presentationModel): PresentationModel
     {
         if (!$this->hasData($presentationModel)) {
             $presentationModel = $presentationModel->withVariables([

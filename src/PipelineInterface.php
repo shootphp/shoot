@@ -3,15 +3,18 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot;
 
+use Psr\Http\Message\ServerRequestInterface;
+
 interface PipelineInterface
 {
     /**
-     * Applies the given context to the pipeline, executes the given callback, and clears the context.
+     * During the execution of the callback, any middleware in the pipeline will have access to the given request
+     * object.
      *
-     * @param mixed    $context
-     * @param callable $callback
+     * @param ServerRequestInterface $request  The current HTTP request being handled.
+     * @param callable               $callback A callback which should call Twig to render the root template.
      *
      * @return mixed The result as returned by the callback (if any).
      */
-    public function withContext($context, callable $callback);
+    public function withRequest(ServerRequestInterface $request, callable $callback);
 }

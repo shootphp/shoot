@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Shoot\Shoot\Tests\Middleware;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ServerRequestInterface;
 use Shoot\Shoot\Middleware\PresenterMiddleware;
 use Shoot\Shoot\MiddlewareInterface;
 use Shoot\Shoot\Tests\Fixtures\Container;
@@ -19,12 +20,16 @@ final class PresenterMiddlewareTest extends TestCase
     /** @var callable */
     private $next;
 
+    /** @var ServerRequestInterface */
+    private $request;
+
     /**
      * @return void
      */
     protected function setUp()
     {
         $this->middleware = new PresenterMiddleware(new Container());
+        $this->request = $this->prophesize(ServerRequestInterface::class)->reveal();
         $this->next = new MiddlewareCallback();
     }
 
@@ -34,10 +39,9 @@ final class PresenterMiddlewareTest extends TestCase
     public function testProcessShouldNotLoadPresenterIfPresentationModelHasData()
     {
         $presentationModel = new Item(['name' => 'item']);
-
         $view = ViewFactory::create($presentationModel);
 
-        $view = $this->middleware->process($view, null, $this->next);
+        $view = $this->middleware->process($view, $this->request, $this->next);
 
         $this->assertSame($presentationModel, $view->getPresentationModel());
     }
@@ -53,7 +57,7 @@ final class PresenterMiddlewareTest extends TestCase
 
         $this->assertEmpty($view->getPresentationModel()->getVariables()['name']);
 
-        $view = $this->middleware->process($view, null, $this->next);
+        $view = $this->middleware->process($view, $this->request, $this->next);
 
         $this->assertSame('item', $view->getPresentationModel()->getVariables()['name']);
     }

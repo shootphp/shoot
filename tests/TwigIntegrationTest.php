@@ -4,14 +4,19 @@ declare(strict_types=1);
 namespace Shoot\Shoot\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ServerRequestInterface;
 use Shoot\Shoot\Middleware\PresenterMiddleware;
 use Shoot\Shoot\Pipeline;
+use Shoot\Shoot\PipelineInterface;
 use Shoot\Shoot\Tests\Fixtures\Container;
 use Twig_Environment as Environment;
 use Twig_Loader_Filesystem as FilesystemLoader;
 
 final class TwigIntegrationTest extends TestCase
 {
+    /** @var PipelineInterface */
+    private $pipeline;
+
     /** @var Environment */
     private $twig;
 
@@ -21,11 +26,14 @@ final class TwigIntegrationTest extends TestCase
     protected function setUp()
     {
         $container = new Container();
-        $middleware = [new PresenterMiddleware($container)];
-        $pipeline = new Pipeline($middleware);
+        $pipeline = new Pipeline([new PresenterMiddleware($container)]);
+
         $loader = new FilesystemLoader([realpath(__DIR__ . '/Fixtures/Templates')]);
-        $this->twig = new Environment($loader, ['cache' => false, 'strict_variables' => true]);
-        $this->twig->addExtension($pipeline);
+        $twig = new Environment($loader, ['cache' => false, 'strict_variables' => true]);
+        $twig->addExtension($pipeline);
+
+        $this->pipeline = $pipeline;
+        $this->twig = $twig;
     }
 
     /**
@@ -89,11 +97,16 @@ final class TwigIntegrationTest extends TestCase
      */
     private function renderTemplate(string $template): array
     {
-        $output = $this->twig->render($template);
-        $output = trim($output);
-        $output = explode(PHP_EOL, $output);
-        $output = array_map('trim', $output);
+        /** @var ServerRequestInterface $request */
+        $request = $this->prophesize(ServerRequestInterface::class)->reveal();
 
-        return $output;
+        return $this->pipeline->withRequest($request, function () use ($template) {
+            $output = $this->twig->render($template);
+            $output = trim($output);
+            $output = explode(PHP_EOL, $output);
+            $output = array_map('trim', $output);
+
+            return $output;
+        });
     }
 }
