@@ -5,6 +5,7 @@ namespace Shoot\Shoot;
 
 use Shoot\Shoot\Twig\NodeVisitor\ModelNodeVisitor;
 use Shoot\Shoot\Twig\TokenParser\ModelTokenParser;
+use Shoot\Shoot\Twig\TokenParser\OptionalTokenParser;
 use Twig_ExtensionInterface as ExtensionInterface;
 use Twig_Filter as TwigFilter;
 use Twig_Function as TwigFunction;
@@ -103,6 +104,9 @@ final class Extension implements ExtensionInterface
      */
     public function getTokenParsers(): array
     {
-        return [new ModelTokenParser()];
+        return [
+            new ModelTokenParser(),
+            new OptionalTokenParser(),
+        ];
     }
 }

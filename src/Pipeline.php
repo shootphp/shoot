@@ -71,9 +71,13 @@ final class Pipeline
                 return $middleware->process($view, $this->request, $next);
             };
         }, function (View $view): View {
-            $view->render();
+            try {
+                $view->render();
 
-            return $view;
+                return $view;
+            } catch (SuppressedException $exception) {
+                return $view->withSuppressedException($exception->getPrevious());
+            }
         });
     }
 }

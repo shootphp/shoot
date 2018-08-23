@@ -21,7 +21,7 @@ final class ViewFactory
         string $name = ''
     ): View {
         if ($presentationModel === null) {
-            $presentationModel = new PresentationModel();
+            $presentationModel = new Item();
         }
 
         if ($callback === null) {

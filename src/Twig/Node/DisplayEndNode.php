@@ -46,6 +46,12 @@ final class DisplayEndNode extends Node
         $view = View::class;
 
         $compiler
+            ->raw("\n")
+            ->write("if (\$suppressedException instanceof \\Shoot\\Shoot\\SuppressedException) {\n")
+            ->indent()
+            ->write("throw \$suppressedException;\n")
+            ->outdent()
+            ->write("}\n")
             ->outdent()
             ->write("};\n\n")
             ->write("\$this->env\n")

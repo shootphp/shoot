@@ -10,6 +10,7 @@ use Shoot\Shoot\Middleware\PresenterMiddleware;
 use Shoot\Shoot\Pipeline;
 use Shoot\Shoot\Tests\Fixtures\Container;
 use Twig_Environment as Environment;
+use Twig_Error_Runtime;
 use Twig_Loader_Filesystem as FilesystemLoader;
 
 final class TwigIntegrationTest extends TestCase
@@ -75,7 +76,7 @@ final class TwigIntegrationTest extends TestCase
     {
         $this->expectExceptionMessage('model has already been assigned');
 
-        $this->renderTemplate('duplicate_models.twig');
+        $this->renderTemplate('multiple_models.twig');
     }
 
     /**
@@ -89,6 +90,28 @@ final class TwigIntegrationTest extends TestCase
             '# title: item',
             'description',
         ], $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testOptionalBlocksShouldBeHiddenIfTheyFail()
+    {
+        $output = $this->renderTemplate('optional_runtime_exception.twig');
+
+        $this->assertContains('header', $output);
+        $this->assertNotContains('should not be rendered', $output);
+        $this->assertContains('footer', $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testOptionalBlocksShouldNotSuppressUnknownVariables()
+    {
+        $this->expectException(Twig_Error_Runtime::class);
+
+        $this->renderTemplate('optional_unknown_variable.twig');
     }
 
     /**

@@ -5,6 +5,7 @@ namespace Shoot\Shoot\Middleware;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
+use Shoot\Shoot\HasPresenterInterface;
 use Shoot\Shoot\MiddlewareInterface;
 use Shoot\Shoot\View;
 
@@ -33,9 +34,11 @@ final class LoggingMiddleware implements MiddlewareInterface
      */
     public function process(View $view, ServerRequestInterface $request, callable $next): View
     {
-        /** @var View $view */
         $startTime = microtime(true);
+
+        /** @var View $view */
         $view = $next($view);
+
         $endTime = microtime(true);
 
         $presentationModel = $view->getPresentationModel();
@@ -46,7 +49,17 @@ final class LoggingMiddleware implements MiddlewareInterface
             'variables' => $presentationModel->getVariables(),
         ];
 
-        $this->logger->debug($view->getName(), $fields);
+        if ($presentationModel instanceof HasPresenterInterface) {
+            $fields['presenter_name'] = $presentationModel->getPresenterName();
+        }
+
+        if ($view->hasSuppressedException()) {
+            $fields['exception'] = $view->getSuppressedException();
+
+            $this->logger->warning($view->getName(), $fields);
+        } else {
+            $this->logger->debug($view->getName(), $fields);
+        }
 
         return $view;
     }

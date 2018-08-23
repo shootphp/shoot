@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Shoot\Shoot;
 
 use InvalidArgumentException;
+use Throwable;
 
 /**
  * A view is the visual representation of a model.
@@ -18,6 +19,9 @@ final class View
 
     /** @var PresentationModel */
     private $presentationModel;
+
+    /** @var null|Throwable */
+    private $suppressedException;
 
     /**
      * @param string            $name              The name of the view.
@@ -72,6 +76,35 @@ final class View
     {
         $new = clone $this;
         $new->presentationModel = $presentationModel;
+
+        return $new;
+    }
+
+    /**
+     * @return null|Throwable
+     */
+    public function getSuppressedException()
+    {
+        return $this->suppressedException;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasSuppressedException(): bool
+    {
+        return $this->suppressedException !== null;
+    }
+
+    /**
+     * @param null|Throwable $exception
+     *
+     * @return View
+     */
+    public function withSuppressedException(Throwable $exception = null): self
+    {
+        $new = clone $this;
+        $new->suppressedException = $exception;
 
         return $new;
     }

@@ -108,7 +108,7 @@ final class Logger implements LoggerInterface
     }
 
     /**
-     * @param mixed   $level
+     * @param string  $level
      * @param string  $message
      * @param mixed[] $context
      *
