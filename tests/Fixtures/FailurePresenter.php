@@ -8,7 +8,7 @@ use RuntimeException;
 use Shoot\Shoot\PresentationModel;
 use Shoot\Shoot\PresenterInterface;
 
-final class FailingPresenter implements PresenterInterface
+final class FailurePresenter implements PresenterInterface
 {
     /**
      * @param ServerRequestInterface $request           The current HTTP request being handled.

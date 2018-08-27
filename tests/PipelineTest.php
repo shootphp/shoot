@@ -3,16 +3,18 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Tests;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
+use Shoot\Shoot\MiddlewareInterface;
 use Shoot\Shoot\MissingRequestException;
 use Shoot\Shoot\Pipeline;
-use Shoot\Shoot\Tests\Fixtures\Middleware;
 use Shoot\Shoot\Tests\Fixtures\ViewFactory;
+use stdClass;
 
 final class PipelineTest extends TestCase
 {
-    /** @var ServerRequestInterface */
+    /** @var ServerRequestInterface|MockObject */
     private $request;
 
     /**
@@ -20,61 +22,62 @@ final class PipelineTest extends TestCase
      */
     protected function setUp()
     {
-        $this->request = $this->prophesize(ServerRequestInterface::class)->reveal();
+        $this->request = $this->createMock(ServerRequestInterface::class);
     }
 
     /**
      * @return void
      */
-    public function testProcessShouldCallMiddleware()
+    public function testShouldCallMiddleware()
     {
-        $wasCalled = false;
-
-        $pipeline = new Pipeline([
-            new Middleware(function () use (&$wasCalled) {
-                $wasCalled = true;
-            }),
-        ]);
-
         $view = ViewFactory::create();
 
+        $middleware = $this->createMock(MiddlewareInterface::class);
+        $middleware
+            ->expects($this->once())
+            ->method('process')
+            ->willReturn($view);
+
+        $pipeline = new Pipeline([$middleware]);
+
         $pipeline->withRequest($this->request, function () use ($pipeline, $view) {
             $pipeline->process($view);
         });
-
-        $this->assertTrue($wasCalled);
     }
 
     /**
      * @return void
      */
-    public function testProcessShouldRenderView()
+    public function testShouldRenderView()
     {
-        $wasCalled = false;
-
         $pipeline = new Pipeline();
 
-        $view = ViewFactory::create(null, function () use (&$wasCalled) {
-            $wasCalled = true;
-        });
+        /** @var callable|MockObject $callback */
+        $callback = $this
+            ->getMockBuilder(stdClass::class)
+            ->setMethods(['__invoke'])
+            ->getMock();
+
+        $callback
+            ->expects($this->once())
+            ->method('__invoke');
+
+        $view = ViewFactory::createWithCallback($callback);
 
         $pipeline->withRequest($this->request, function () use ($pipeline, $view) {
             $pipeline->process($view);
         });
-
-        $this->assertTrue($wasCalled);
     }
 
     /**
      * @return void
      */
-    public function testProcessShouldThrowIfNoRequestWasSet()
+    public function testShouldThrowIfNoRequestWasSet()
     {
+        $pipeline = new Pipeline();
+        $view = ViewFactory::create();
+
         $this->expectException(MissingRequestException::class);
-
-        $pipeline = new Pipeline();
-
-        $view = ViewFactory::create();
 
         $pipeline->process($view);
     }

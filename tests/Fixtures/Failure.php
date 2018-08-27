@@ -13,6 +13,6 @@ final class Failure extends PresentationModel implements HasPresenterInterface
      */
     public function getPresenterName(): string
     {
-        return FailingPresenter::class;
+        return FailurePresenter::class;
     }
 }

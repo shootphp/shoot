@@ -3,12 +3,13 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Tests;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Shoot\Shoot\Extension;
 use Shoot\Shoot\Middleware\PresenterMiddleware;
 use Shoot\Shoot\Pipeline;
-use Shoot\Shoot\Tests\Fixtures\Container;
+use Shoot\Shoot\Tests\Mocks\ContainerStub;
 use Twig_Environment as Environment;
 use Twig_Error_Runtime;
 use Twig_Loader_Filesystem as FilesystemLoader;
@@ -18,6 +19,9 @@ final class TwigIntegrationTest extends TestCase
     /** @var Pipeline */
     private $pipeline;
 
+    /** @var ServerRequestInterface|MockObject */
+    private $request;
+
     /** @var Environment */
     private $twig;
 
@@ -26,7 +30,7 @@ final class TwigIntegrationTest extends TestCase
      */
     protected function setUp()
     {
-        $container = new Container();
+        $container = new ContainerStub();
         $pipeline = new Pipeline([new PresenterMiddleware($container)]);
         $extension = new Extension($pipeline);
 
@@ -35,13 +39,14 @@ final class TwigIntegrationTest extends TestCase
         $twig->addExtension($extension);
 
         $this->pipeline = $pipeline;
+        $this->request = $this->createMock(ServerRequestInterface::class);
         $this->twig = $twig;
     }
 
     /**
      * @return void
      */
-    public function testRenderSingleModel()
+    public function testShouldRenderASingleModel()
     {
         $output = $this->renderTemplate('item.twig');
 
@@ -54,7 +59,7 @@ final class TwigIntegrationTest extends TestCase
     /**
      * @return void
      */
-    public function testRenderListOfModels()
+    public function testShouldRenderAListOfModels()
     {
         $output = $this->renderTemplate('item_list.twig');
 
@@ -121,10 +126,7 @@ final class TwigIntegrationTest extends TestCase
      */
     private function renderTemplate(string $template): array
     {
-        /** @var ServerRequestInterface $request */
-        $request = $this->prophesize(ServerRequestInterface::class)->reveal();
-
-        return $this->pipeline->withRequest($request, function () use ($template) {
+        return $this->pipeline->withRequest($this->request, function () use ($template) {
             $output = $this->twig->render($template);
             $output = trim($output);
             $output = explode(PHP_EOL, $output);

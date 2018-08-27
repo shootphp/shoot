@@ -3,48 +3,41 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Tests;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Shoot\Shoot\Extension;
+use Shoot\Shoot\MiddlewareInterface;
 use Shoot\Shoot\Pipeline;
 use Shoot\Shoot\PresentationModel;
-use Shoot\Shoot\Tests\Fixtures\Middleware;
 use Shoot\Shoot\Tests\Fixtures\ViewFactory;
 use Twig_Filter as TwigFilter;
 use Twig_Test as TwigTest;
 
 final class ExtensionTest extends TestCase
 {
-    /** @var ServerRequestInterface */
-    private $request;
-
     /**
      * @return void
      */
-    protected function setUp()
-    {
-        $this->request = $this->prophesize(ServerRequestInterface::class)->reveal();
-    }
-
     public function testExtensionShouldDelegateProcessingToPipeline()
     {
-        $wasCalled = false;
-
-        $pipeline = new Pipeline([
-            new Middleware(function () use (&$wasCalled) {
-                $wasCalled = true;
-            }),
-        ]);
-
-        $extension = new Extension($pipeline);
-
+        /** @var ServerRequestInterface|MockObject $request */
+        $request = $this->createMock(ServerRequestInterface::class);
         $view = ViewFactory::create();
 
-        $pipeline->withRequest($this->request, function () use ($extension, $view) {
+        $middleware = $this->createMock(MiddlewareInterface::class);
+        $middleware
+            ->expects($this->once())
+            ->method('process')
+            ->with($this->equalTo($view))
+            ->willReturn($view);
+
+        $pipeline = new Pipeline([$middleware]);
+        $extension = new Extension($pipeline);
+
+        $pipeline->withRequest($request, function () use ($extension, $view) {
             $extension->process($view);
         });
-
-        $this->assertTrue($wasCalled);
     }
 
     /**
@@ -62,7 +55,7 @@ final class ExtensionTest extends TestCase
 
         $this->assertCount(1, $filters);
 
-        $filter = array_shift($filters);
+        list($filter) = $filters;
         $callback = $filter->getCallable();
 
         /** @var mixed[] $variables */
@@ -88,7 +81,7 @@ final class ExtensionTest extends TestCase
 
         $this->assertCount(1, $tests);
 
-        $test = array_shift($tests);
+        list($test) = $tests;
         $callback = $test->getCallable();
 
         $this->assertTrue($callback($presentationModel));

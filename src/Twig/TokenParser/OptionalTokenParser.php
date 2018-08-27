@@ -16,8 +16,6 @@ final class OptionalTokenParser extends AbstractTokenParser
      *
      * @param Token $token
      *
-     * @throws SyntaxError
-     *
      * @return Node
      */
     public function parse(Token $token): Node

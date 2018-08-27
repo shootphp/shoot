@@ -6,27 +6,26 @@ namespace Shoot\Shoot\Tests\Middleware;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Shoot\Shoot\Middleware\InspectorMiddleware;
-use Shoot\Shoot\Tests\Fixtures\Item;
-use Shoot\Shoot\Tests\Fixtures\MiddlewareCallback;
 use Shoot\Shoot\Tests\Fixtures\ViewFactory;
+use Shoot\Shoot\View;
 
 final class InspectorMiddlewareTest extends TestCase
 {
     /**
      * @return void
      */
-    public function testProcessShouldLogDebugInformationToConsole()
+    public function testShouldLogDebugInformationToConsole()
     {
+        /** @var ServerRequestInterface|MockObject $request */
+        $request = $this->createMock(ServerRequestInterface::class);
+        $view = ViewFactory::create();
+        $next = function (View $view): View {
+            return $view;
+        };
+
         $this->expectOutputRegex('/<script>.+<\/script>/');
 
-        /** @var ServerRequestInterface $request */
-        $request = $this->prophesize(ServerRequestInterface::class)->reveal();
-
         $middleware = new InspectorMiddleware();
-        $next = new MiddlewareCallback();
-        $presentationModel = new Item();
-        $view = ViewFactory::create($presentationModel);
-
         $middleware->process($view, $request, $next);
     }
 }

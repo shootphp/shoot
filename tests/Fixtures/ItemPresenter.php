@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Shoot\Shoot\Tests\Fixtures;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Shoot\Shoot\HasDataTrait;
 use Shoot\Shoot\PresentationModel;
 use Shoot\Shoot\PresenterInterface;
+use Shoot\Shoot\Utilities\HasDataTrait;
 
 final class ItemPresenter implements PresenterInterface
 {

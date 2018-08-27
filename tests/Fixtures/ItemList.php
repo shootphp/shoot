@@ -12,7 +12,7 @@ final class ItemList extends PresentationModel implements HasPresenterInterface
     protected $items = [];
 
     /**
-     * @return string The class name of the presenter for this presentation model.
+     * @return string The name by which to resolve the presenter through the DI container.
      */
     public function getPresenterName(): string
     {

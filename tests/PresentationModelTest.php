@@ -44,7 +44,7 @@ final class PresentationModelTest extends TestCase
     public function testGetVariableShouldReturnValueOfVariable()
     {
         $presentationModel = new Item([
-            'name' => 'name'
+            'name' => 'name',
         ]);
 
         $this->assertSame('name', $presentationModel->getVariable('name', 'default'));

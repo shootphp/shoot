@@ -3,21 +3,21 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Tests\Middleware;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\LogLevel;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Shoot\Shoot\Middleware\LoggingMiddleware;
-use Shoot\Shoot\Tests\Fixtures\Logger;
-use Shoot\Shoot\Tests\Fixtures\MiddlewareCallback;
 use Shoot\Shoot\Tests\Fixtures\ViewFactory;
+use Shoot\Shoot\View;
 
 final class LoggingMiddlewareTest extends TestCase
 {
     /** @var callable */
     private $next;
 
-    /** @var ServerRequestInterface */
+    /** @var ServerRequestInterface|MockObject */
     private $request;
 
     /**
@@ -25,51 +25,58 @@ final class LoggingMiddlewareTest extends TestCase
      */
     protected function setUp()
     {
-        $this->next = new MiddlewareCallback();
-        $this->request = $this->prophesize(ServerRequestInterface::class)->reveal();
+        $this->request = $this->createMock(ServerRequestInterface::class);
+        $this->next = function (View $view): View {
+            return $view;
+        };
     }
 
     /**
      * @return void
      */
-    public function testProcessShouldLogBasicDebugInformation()
+    public function testShouldLogBasicDebugInformation()
     {
         $view = ViewFactory::create();
-        $wasCalled = false;
 
-        $middleware = new LoggingMiddleware(new Logger(function ($level, $message, $context) use (&$wasCalled) {
-            $this->assertSame(LogLevel::DEBUG, $level);
-            $this->assertSame('item.twig', $message);
-            $this->assertArrayHasKey('presentation_model', $context);
-            $this->assertArrayHasKey('presenter_name', $context);
-            $this->assertArrayHasKey('time_taken', $context);
-            $this->assertArrayHasKey('variables', $context);
+        /** @var LoggerInterface|MockObject $logger */
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger
+            ->expects($this->once())
+            ->method('debug')
+            ->with(
+                $this->equalTo('item.twig'),
+                $this->callback(function (array $context): bool {
+                    $diff = array_diff(
+                        array_keys($context),
+                        ['presentation_model', 'presenter_name', 'time_taken', 'variables']
+                    );
 
-            $wasCalled = true;
-        }));
+                    return count($diff) === 0;
+                })
+            );
 
+        $middleware = new LoggingMiddleware($logger);
         $middleware->process($view, $this->request, $this->next);
-
-        $this->assertTrue($wasCalled);
     }
 
     /**
      * @return void
      */
-    public function testProcessShouldLogSuppressedExceptions()
+    public function testShouldLogSuppressedExceptions()
     {
         $view = ViewFactory::create()->withSuppressedException(new RuntimeException());
-        $wasCalled = false;
 
-        $middleware = new LoggingMiddleware(new Logger(function ($level, $message, $context) use (&$wasCalled) {
-            $this->assertSame(LogLevel::WARNING, $level);
-            $this->assertArrayHasKey('exception', $context);
+        /** @var LoggerInterface|MockObject $logger */
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger
+            ->expects($this->once())
+            ->method('warning')
+            ->with(
+                $this->equalTo('item.twig'),
+                $this->arrayHasKey('exception')
+            );
 
-            $wasCalled = true;
-        }));
-
+        $middleware = new LoggingMiddleware($logger);
         $middleware->process($view, $this->request, $this->next);
-
-        $this->assertTrue($wasCalled);
     }
 }

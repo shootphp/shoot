@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Shoot\Http\Tests;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -19,8 +20,12 @@ final class ShootMiddlewareTest extends TestCase
      */
     public function testHttpRequestShouldBeSetOnPipeline()
     {
+        /** @var ServerRequestInterface|MockObject $request */
         $request = $this->createMock(ServerRequestInterface::class);
+
+        /** @var ResponseInterface|MockObject $response */
         $response = $this->createMock(ResponseInterface::class);
+
         $view = ViewFactory::create();
 
         $middleware = $this->createMock(MiddlewareInterface::class);
@@ -32,6 +37,7 @@ final class ShootMiddlewareTest extends TestCase
 
         $pipeline = new Pipeline([$middleware]);
 
+        /** @var RequestHandlerInterface|MockObject $handler */
         $handler = $this->createMock(RequestHandlerInterface::class);
         $handler
             ->expects($this->once())

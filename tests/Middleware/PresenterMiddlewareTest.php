@@ -3,62 +3,33 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Tests\Middleware;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Shoot\Shoot\Middleware\PresenterMiddleware;
-use Shoot\Shoot\MiddlewareInterface;
-use Shoot\Shoot\Tests\Fixtures\Container;
-use Shoot\Shoot\Tests\Fixtures\Item;
-use Shoot\Shoot\Tests\Fixtures\MiddlewareCallback;
 use Shoot\Shoot\Tests\Fixtures\ViewFactory;
+use Shoot\Shoot\Tests\Mocks\ContainerStub;
+use Shoot\Shoot\View;
 
 final class PresenterMiddlewareTest extends TestCase
 {
-    /** @var MiddlewareInterface */
-    private $middleware;
-
-    /** @var callable */
-    private $next;
-
-    /** @var ServerRequestInterface */
-    private $request;
-
     /**
      * @return void
      */
-    protected function setUp()
+    public function testShouldLoadPresenterIfPresentationModelHasPresenter()
     {
-        $this->middleware = new PresenterMiddleware(new Container());
-        $this->request = $this->prophesize(ServerRequestInterface::class)->reveal();
-        $this->next = new MiddlewareCallback();
-    }
+        /** @var ServerRequestInterface|MockObject $request */
+        $request = $this->createMock(ServerRequestInterface::class);
+        $middleware = new PresenterMiddleware(new ContainerStub());
+        $view = ViewFactory::create();
+        $next = function (View $view): View {
+            return $view;
+        };
 
-    /**
-     * @return void
-     */
-    public function testProcessShouldNotLoadPresenterIfPresentationModelHasData()
-    {
-        $presentationModel = new Item(['name' => 'item']);
-        $view = ViewFactory::create($presentationModel);
+        $this->assertEmpty($view->getPresentationModel()->getVariable('name', ''));
 
-        $view = $this->middleware->process($view, $this->request, $this->next);
+        $view = $middleware->process($view, $request, $next);
 
-        $this->assertSame($presentationModel, $view->getPresentationModel());
-    }
-
-    /**
-     * @return void
-     */
-    public function testProcessShouldLoadPresenterIfPresentationModelHasPresenterAndDoesNotHaveData()
-    {
-        $presentationModel = new Item();
-
-        $view = ViewFactory::create($presentationModel);
-
-        $this->assertEmpty($view->getPresentationModel()->getVariables()['name']);
-
-        $view = $this->middleware->process($view, $this->request, $this->next);
-
-        $this->assertSame('item', $view->getPresentationModel()->getVariables()['name']);
+        $this->assertNotEmpty($view->getPresentationModel()->getVariable('name', ''));
     }
 }
