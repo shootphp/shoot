@@ -126,7 +126,7 @@ final class TwigIntegrationTest extends TestCase
      */
     private function renderTemplate(string $template): array
     {
-        return $this->pipeline->withRequest($this->request, function () use ($template) {
+        return $this->pipeline->withRequest($this->request, function () use ($template): array {
             $output = $this->twig->render($template);
             $output = trim($output);
             $output = explode(PHP_EOL, $output);
