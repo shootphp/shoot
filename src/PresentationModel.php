@@ -25,6 +25,17 @@ class PresentationModel
     }
 
     /**
+     * @param string $variable
+     * @param mixed  $default
+     *
+     * @return mixed
+     */
+    final public function getVariable(string $variable, $default = null)
+    {
+        return $this->$variable ?? $default;
+    }
+
+    /**
      * @return mixed[]
      */
     final public function getVariables(): array

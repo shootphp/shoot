@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Shoot\Shoot;
+namespace Shoot\Shoot\Utilities;
+
+use Shoot\Shoot\PresentationModel;
 
 /**
  * A convenience trait for Presenters. It checks if a presentation model already holds data. If so, it might not be

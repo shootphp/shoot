@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Shoot\Shoot\Twig\NodeVisitor;
 
 use LogicException;
+use Shoot\Shoot\ModelAlreadyAssignedException;
 use Shoot\Shoot\PresentationModel;
 use Shoot\Shoot\Twig\Node\DisplayEndNode;
 use Shoot\Shoot\Twig\Node\DisplayStartNode;
@@ -97,7 +98,7 @@ final class ModelNodeVisitor implements FindPresentationModelInterface, NodeVisi
     private function assign(string $view, string $presentationModel)
     {
         if (isset($this->presentationModels[$view])) {
-            throw new LogicException("A presentation model has already been assigned to {$view}");
+            throw new ModelAlreadyAssignedException("A presentation model has already been assigned to {$view}");
         }
 
         $this->presentationModels[$view] = $presentationModel;

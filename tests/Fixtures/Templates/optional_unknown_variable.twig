@@ -1,0 +1,7 @@
+{##
+ # Exceptions thrown as a result of unknown variables should not be suppressed by the 'optional' tag as they're a
+ # result of a logic error.
+ #}
+{% optional %}
+    {{ unknown_variable }}
+{% endoptional %}

@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace Shoot\Shoot\Tests\Fixtures;
+namespace Shoot\Shoot\Tests\Mocks;
 
 use Exception;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-final class Container implements ContainerInterface
+final class ContainerStub implements ContainerInterface
 {
     /**
      * @param string $id
      *
-     * @throws Exception|NotFoundExceptionInterface
+     * @throws NotFoundExceptionInterface
      *
      * @return mixed
      */

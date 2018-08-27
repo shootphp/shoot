@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Middleware;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Shoot\Shoot\HasPresenterInterface;
 use Shoot\Shoot\MiddlewareInterface;
 use Shoot\Shoot\PresentationModel;
@@ -15,13 +16,13 @@ use Shoot\Shoot\View;
 final class InspectorMiddleware implements MiddlewareInterface
 {
     /**
-     * @param View     $view    The view to be processed by this middleware.
-     * @param mixed    $context The context in which to process the view.
-     * @param callable $next    The next middleware to call
+     * @param View                   $view    The view to be processed by this middleware.
+     * @param ServerRequestInterface $request The current HTTP request being handled.
+     * @param callable               $next    The next middleware to call.
      *
      * @return View The processed view.
      */
-    public function process(View $view, $context, callable $next): View
+    public function process(View $view, ServerRequestInterface $request, callable $next): View
     {
         $this->script();
         $this->view($view);
@@ -140,7 +141,7 @@ final class InspectorMiddleware implements MiddlewareInterface
         $this->value($presentationModel->getName(), 'name');
 
         if ($presentationModel instanceof HasPresenterInterface) {
-            $this->value($presentationModel->getPresenter(), 'presenter');
+            $this->value($presentationModel->getPresenterName(), 'presenter');
         }
 
         $this->iterable($presentationModel->getVariables(), 'variables');

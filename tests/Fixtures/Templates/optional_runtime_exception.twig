@@ -1,0 +1,9 @@
+{##
+ # Parts of a template which are wrapped in the 'optional' tag should suppress any runtime exceptions during rendering.
+ # In case of an exception, all content within the 'optional' is simply not rendered.
+ #}
+header
+{% optional %}
+    {% include 'runtime_exception.twig' %}
+{% endoptional %}
+footer

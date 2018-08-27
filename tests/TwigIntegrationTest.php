@@ -3,15 +3,25 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Tests;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ServerRequestInterface;
+use Shoot\Shoot\Extension;
 use Shoot\Shoot\Middleware\PresenterMiddleware;
 use Shoot\Shoot\Pipeline;
-use Shoot\Shoot\Tests\Fixtures\Container;
+use Shoot\Shoot\Tests\Mocks\ContainerStub;
 use Twig_Environment as Environment;
+use Twig_Error_Runtime;
 use Twig_Loader_Filesystem as FilesystemLoader;
 
 final class TwigIntegrationTest extends TestCase
 {
+    /** @var Pipeline */
+    private $pipeline;
+
+    /** @var ServerRequestInterface|MockObject */
+    private $request;
+
     /** @var Environment */
     private $twig;
 
@@ -20,18 +30,23 @@ final class TwigIntegrationTest extends TestCase
      */
     protected function setUp()
     {
-        $container = new Container();
-        $middleware = [new PresenterMiddleware($container)];
-        $pipeline = new Pipeline($middleware);
+        $container = new ContainerStub();
+        $pipeline = new Pipeline([new PresenterMiddleware($container)]);
+        $extension = new Extension($pipeline);
+
         $loader = new FilesystemLoader([realpath(__DIR__ . '/Fixtures/Templates')]);
-        $this->twig = new Environment($loader, ['cache' => false, 'strict_variables' => true]);
-        $this->twig->addExtension($pipeline);
+        $twig = new Environment($loader, ['cache' => false, 'strict_variables' => true]);
+        $twig->addExtension($extension);
+
+        $this->pipeline = $pipeline;
+        $this->request = $this->createMock(ServerRequestInterface::class);
+        $this->twig = $twig;
     }
 
     /**
      * @return void
      */
-    public function testRenderSingleModel()
+    public function testShouldRenderASingleModel()
     {
         $output = $this->renderTemplate('item.twig');
 
@@ -44,7 +59,7 @@ final class TwigIntegrationTest extends TestCase
     /**
      * @return void
      */
-    public function testRenderListOfModels()
+    public function testShouldRenderAListOfModels()
     {
         $output = $this->renderTemplate('item_list.twig');
 
@@ -66,7 +81,7 @@ final class TwigIntegrationTest extends TestCase
     {
         $this->expectExceptionMessage('model has already been assigned');
 
-        $this->renderTemplate('duplicate_models.twig');
+        $this->renderTemplate('multiple_models.twig');
     }
 
     /**
@@ -83,17 +98,41 @@ final class TwigIntegrationTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testOptionalBlocksShouldBeHiddenIfTheyFail()
+    {
+        $output = $this->renderTemplate('optional_runtime_exception.twig');
+
+        $this->assertContains('header', $output);
+        $this->assertNotContains('should not be rendered', $output);
+        $this->assertContains('footer', $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testOptionalBlocksShouldNotSuppressUnknownVariables()
+    {
+        $this->expectException(Twig_Error_Runtime::class);
+
+        $this->renderTemplate('optional_unknown_variable.twig');
+    }
+
+    /**
      * @param string $template
      *
      * @return string[]
      */
     private function renderTemplate(string $template): array
     {
-        $output = $this->twig->render($template);
-        $output = trim($output);
-        $output = explode(PHP_EOL, $output);
-        $output = array_map('trim', $output);
+        return $this->pipeline->withRequest($this->request, function () use ($template): array {
+            $output = $this->twig->render($template);
+            $output = trim($output);
+            $output = explode(PHP_EOL, $output);
+            $output = array_map('trim', $output);
 
-        return $output;
+            return $output;
+        });
     }
 }

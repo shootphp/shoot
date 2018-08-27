@@ -37,4 +37,26 @@ final class PresentationModelTest extends TestCase
         $this->assertArrayHasKey('name', $variables);
         $this->assertArrayNotHasKey('some_other_variable', $variables);
     }
+
+    /**
+     * @return void
+     */
+    public function testGetVariableShouldReturnValueOfVariable()
+    {
+        $presentationModel = new Item([
+            'name' => 'name',
+        ]);
+
+        $this->assertSame('name', $presentationModel->getVariable('name', 'default'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetVariableShouldReturnDefaultValueIfVariableDoesNotExist()
+    {
+        $presentationModel = new PresentationModel();
+
+        $this->assertSame('default', $presentationModel->getVariable('does_not_exist', 'default'));
+    }
 }

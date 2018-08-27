@@ -4,57 +4,46 @@ declare(strict_types=1);
 namespace Shoot\Shoot\Tests;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shoot\Shoot\PresentationModel;
-use Shoot\Shoot\Tests\Fixtures\Item;
-use Shoot\Shoot\Tests\Fixtures\ViewCallback;
 use Shoot\Shoot\Tests\Fixtures\ViewFactory;
 use Shoot\Shoot\View;
+use stdClass;
 
 final class ViewTest extends TestCase
 {
     /**
      * @return void
      */
-    public function testConstructorShouldNotAllowEmptyNames()
+    public function testShouldNotAllowEmptyNames()
     {
-        $this->expectException(InvalidArgumentException::class);
-
-        $name = '';
         $presentationModel = new PresentationModel();
-        $callback = new ViewCallback();
-
-        new View($name, $presentationModel, $callback);
-    }
-
-    /**
-     * @return void
-     */
-    public function testRenderShouldExecuteCallback()
-    {
-        $wasCalled = false;
-
-        $callback = function () use (&$wasCalled) {
-            $wasCalled = true;
+        $callback = function () {
+            // noop
         };
 
-        $view = ViewFactory::create(null, $callback);
+        $this->expectException(InvalidArgumentException::class);
 
-        $view->render();
-
-        $this->assertTrue($wasCalled);
+        new View('', $presentationModel, $callback);
     }
 
     /**
      * @return void
      */
-    public function testWithPresentationModelShouldReturnNewInstance()
+    public function testShouldExecuteCallback()
     {
-        $originalView = ViewFactory::create();
+        /** @var callable|MockObject $callback */
+        $callback = $this
+            ->getMockBuilder(stdClass::class)
+            ->setMethods(['__invoke'])
+            ->getMock();
 
-        $presentationModel = new Item();
-        $updatedView = $originalView->withPresentationModel($presentationModel);
+        $callback
+            ->expects($this->once())
+            ->method('__invoke');
 
-        $this->assertNotSame($originalView, $updatedView);
+        $view = ViewFactory::createWithCallback($callback);
+        $view->render();
     }
 }

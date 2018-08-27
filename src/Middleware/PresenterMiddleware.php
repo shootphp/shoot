@@ -5,6 +5,7 @@ namespace Shoot\Shoot\Middleware;
 
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Shoot\Shoot\HasPresenterInterface;
 use Shoot\Shoot\MiddlewareInterface;
 use Shoot\Shoot\PresenterInterface;
@@ -27,20 +28,19 @@ final class PresenterMiddleware implements MiddlewareInterface
     }
 
     /**
-     * @param View     $view    The view to be processed by this middleware.
-     * @param mixed    $context The context in which to process the view.
-     * @param callable $next    The next middleware to call
+     * @param View                   $view    The view to be processed by this middleware.
+     * @param ServerRequestInterface $request The current HTTP request being handled.
+     * @param callable               $next    The next middleware to call.
      *
-     * @throws ContainerExceptionInterface
      * @return View The processed view.
      */
-    public function process(View $view, $context, callable $next): View
+    public function process(View $view, ServerRequestInterface $request, callable $next): View
     {
         $presentationModel = $view->getPresentationModel();
 
         if ($presentationModel instanceof HasPresenterInterface) {
             $presenter = $this->loadPresenter($presentationModel);
-            $presentationModel = $presenter->present($context, $presentationModel);
+            $presentationModel = $presenter->present($request, $presentationModel);
             $view = $view->withPresentationModel($presentationModel);
         }
 
@@ -58,6 +58,6 @@ final class PresenterMiddleware implements MiddlewareInterface
      */
     private function loadPresenter(HasPresenterInterface $hasPresenter): PresenterInterface
     {
-        return $this->container->get($hasPresenter->getPresenter());
+        return $this->container->get($hasPresenter->getPresenterName());
     }
 }
