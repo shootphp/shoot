@@ -107,12 +107,11 @@ final class Post extends PresentationModel implements HasPresenterInterface
 ```
 
 The fields in a presentation model are the variables that'll be assigned to your template. That's why, as per Twig's
-[code standard][link-twig-code-standard], they use _snake_case_. These fields must be `protected`.
+[coding standards][link-twig-coding-standards], they use _snake_case_. These fields must be `protected`.
 
 This presentation model implements the `HasPresenterInterface`. This indicates to Shoot that there's a presenter
 available to load the data of this model. This interface defines the `getPresenterName` method. This method should
 return the name through which the presenter can be resolved by your DI container.
-
 
 ### Templates
 To assign the model to our template, we use Shoot's `model` tag. Set it at the top of your template and reference the
@@ -208,5 +207,5 @@ The MIT License (MIT). Please see the [license file][link-license] for more info
 [link-psr11]: https://www.php-fig.org/psr/psr-11/
 [link-psr15]: https://www.php-fig.org/psr/psr-15/
 [link-twig]: https://twig.symfony.com/
-[link-twig-code-standard]: https://twig.symfony.com/doc/2.x/coding_standards.html
+[link-twig-coding-standards]: https://twig.symfony.com/doc/2.x/coding_standards.html
 
