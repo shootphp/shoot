@@ -120,6 +120,19 @@ final class TwigIntegrationTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testNestedOptionalBlocksShouldNotAffectedParents()
+    {
+        $output = $this->renderTemplate('optional_nested.twig');
+
+        $this->assertContains('header', $output);
+        $this->assertNotContains('should not be rendered', $output);
+        $this->assertContains('not affected', $output);
+        $this->assertContains('footer', $output);
+    }
+
+    /**
      * @param string $template
      *
      * @return string[]
