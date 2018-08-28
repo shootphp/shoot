@@ -5,13 +5,19 @@ namespace Shoot\Shoot;
 
 use Psr\Http\Message\ServerRequestInterface;
 
+/**
+ * Presenters are responsible for populating your presentation models with data.
+ */
 interface PresenterInterface
 {
     /**
-     * @param ServerRequestInterface $request           The current HTTP request being handled.
-     * @param PresentationModel      $presentationModel The presentation model for the view being rendered.
+     * Receives the current HTTP request context and the presentation model assigned to the view. If necessary,
+     * populates the presentation model with data and returns it.
      *
-     * @return PresentationModel The populated presentation model.
+     * @param ServerRequestInterface $request
+     * @param PresentationModel      $presentationModel
+     *
+     * @return PresentationModel
      */
     public function present(ServerRequestInterface $request, PresentationModel $presentationModel): PresentationModel;
 }

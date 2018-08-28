@@ -8,8 +8,10 @@ use Twig_Node as Node;
 use Twig_Node_Module as ModuleNode;
 
 /**
- * This node is added to the top of the display method of a Twig template and is used by Shoot to wrap its contents in
- * a callback.
+ * This node is added to the top of the display method of a Twig template and is used by Shoot to wrap the method's
+ * contents in a callback.
+ *
+ * @internal
  */
 final class DisplayStartNode extends Node
 {

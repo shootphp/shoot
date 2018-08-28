@@ -13,12 +13,17 @@ use Twig_NodeVisitorInterface as NodeVisitorInterface;
 use Twig_Test as TwigTest;
 use Twig_TokenParserInterface as TokenParserInterface;
 
+/**
+ * This extension for Twig will enable the use of Shoot.
+ */
 final class Extension implements ExtensionInterface
 {
     /** @var Pipeline */
     private $pipeline;
 
     /**
+     * Constructs a new instance of Extension. Takes an instance of the Shoot pipeline.
+     *
      * @param Pipeline $pipeline
      */
     public function __construct(Pipeline $pipeline)
@@ -27,12 +32,11 @@ final class Extension implements ExtensionInterface
     }
 
     /**
-     * @internal This method is used by the compiled Twig templates to access the pipeline. It should not be used
-     * directly.
-     *
      * @param View $view
      *
      * @return void
+     *
+     * @internal
      */
     public function process(View $view)
     {

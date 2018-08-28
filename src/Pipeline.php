@@ -5,6 +5,10 @@ namespace Shoot\Shoot;
 
 use Psr\Http\Message\ServerRequestInterface;
 
+/**
+ * The processing pipeline of Shoot. Holds the middleware that enables Shoot's functionality. It's called from the Twig
+ * extension.
+ */
 final class Pipeline
 {
     /** @var callable */
@@ -14,6 +18,9 @@ final class Pipeline
     private $request;
 
     /**
+     * Constructs an instance of Pipeline. Takes the middleware that enables Shoot's functionality. Middleware is
+     * executed in the same order as given.
+     *
      * @param MiddlewareInterface[] $middleware
      */
     public function __construct(array $middleware = [])
@@ -22,13 +29,13 @@ final class Pipeline
     }
 
     /**
-     * During the execution of the callback, any middleware in the pipeline will have access to the given request
-     * object.
+     * Sets the HTTP request context while executing the given callback. Any templates should be rendered within this
+     * callback. Returns the result returned by the callback (if any).
      *
-     * @param ServerRequestInterface $request  The current HTTP request being handled.
-     * @param callable               $callback A callback which should call Twig to render the root template.
+     * @param ServerRequestInterface $request
+     * @param callable               $callback
      *
-     * @return mixed The result as returned by the callback (if any).
+     * @return mixed
      */
     public function withRequest(ServerRequestInterface $request, callable $callback)
     {
@@ -45,6 +52,8 @@ final class Pipeline
      * @param View $view
      *
      * @return void
+     *
+     * @internal
      */
     public function process(View $view)
     {
@@ -56,8 +65,6 @@ final class Pipeline
     }
 
     /**
-     * Chains the middleware into a single callable.
-     *
      * @param MiddlewareInterface[] $middleware
      *
      * @return callable

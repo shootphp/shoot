@@ -6,9 +6,15 @@ namespace Shoot\Shoot;
 use RuntimeException;
 use Throwable;
 
+/**
+ * Represents an exception that was suppressed by the optional tag. The actual exception is available through
+ * getPrevious().
+ */
 final class SuppressedException extends RuntimeException
 {
     /**
+     * Constructs an instance of SuppressedException.
+     *
      * @param Throwable $previous
      */
     public function __construct(Throwable $previous)

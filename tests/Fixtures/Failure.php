@@ -9,7 +9,9 @@ use Shoot\Shoot\PresentationModel;
 final class Failure extends PresentationModel implements HasPresenterInterface
 {
     /**
-     * @return string The name by which to resolve the presenter through the DI container.
+     * Returns the name by which to resolve the presenter through the DI container.
+     *
+     * @return string
      */
     public function getPresenterName(): string
     {

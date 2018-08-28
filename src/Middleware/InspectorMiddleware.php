@@ -16,11 +16,14 @@ use Shoot\Shoot\View;
 final class InspectorMiddleware implements MiddlewareInterface
 {
     /**
-     * @param View                   $view    The view to be processed by this middleware.
-     * @param ServerRequestInterface $request The current HTTP request being handled.
-     * @param callable               $next    The next middleware to call.
+     * Process the view within the context of the current HTTP request, either before or after calling the next
+     * middleware. Returns the processed view.
      *
-     * @return View The processed view.
+     * @param View                   $view
+     * @param ServerRequestInterface $request
+     * @param callable               $next
+     *
+     * @return View
      */
     public function process(View $view, ServerRequestInterface $request, callable $next): View
     {

@@ -7,7 +7,8 @@ use InvalidArgumentException;
 use Throwable;
 
 /**
- * A view is the visual representation of a model.
+ * A view represents a template with its presentation model. You'll never have to construct a view manually, as this is
+ * taken care of by Shoot's Twig extension. You'll have access to them in any middleware you implement.
  */
 final class View
 {
@@ -20,15 +21,17 @@ final class View
     /** @var PresentationModel */
     private $presentationModel;
 
-    /** @var null|Throwable */
+    /** @var Throwable|null */
     private $suppressedException;
 
     /**
-     * @param string            $name              The name of the view.
-     * @param PresentationModel $presentationModel A presentation model holding the variables for this view.
-     * @param callable          $callback          A callback to render this view.
+     * @param string            $name
+     * @param PresentationModel $presentationModel
+     * @param callable          $callback
      *
      * @throws InvalidArgumentException
+     *
+     * @internal
      */
     public function __construct(string $name, PresentationModel $presentationModel, callable $callback)
     {
@@ -42,9 +45,9 @@ final class View
     }
 
     /**
-     * Renders the view.
-     *
      * @return void
+     *
+     * @internal
      */
     public function render()
     {
@@ -52,7 +55,9 @@ final class View
     }
 
     /**
-     * @return string The name of the view.
+     * Returns the name of the view.
+     *
+     * @return string
      */
     public function getName(): string
     {
@@ -60,6 +65,8 @@ final class View
     }
 
     /**
+     * Returns the presentation model.
+     *
      * @return PresentationModel
      */
     public function getPresentationModel(): PresentationModel
@@ -68,6 +75,8 @@ final class View
     }
 
     /**
+     * Returns a clone of this view with the new presentation model set.
+     *
      * @param PresentationModel $presentationModel
      *
      * @return View
@@ -81,7 +90,9 @@ final class View
     }
 
     /**
-     * @return null|Throwable
+     * Returns the exception that was suppressed while rendering this view.
+     *
+     * @return Throwable|null
      */
     public function getSuppressedException()
     {
@@ -89,6 +100,8 @@ final class View
     }
 
     /**
+     * Returns whether an exception was suppressed while rendering this view.
+     *
      * @return bool
      */
     public function hasSuppressedException(): bool
@@ -97,7 +110,9 @@ final class View
     }
 
     /**
-     * @param null|Throwable $exception
+     * Returns a clone of this view with the suppressed exception set.
+     *
+     * @param Throwable|null $exception
      *
      * @return View
      */

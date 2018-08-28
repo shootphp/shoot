@@ -12,11 +12,11 @@ use Shoot\Shoot\PresentationModel;
 trait HasDataTrait
 {
     /**
-     * Determine whether the presentation model already holds data.
+     * Returns whether the presentation model already holds data.
      *
-     * @param PresentationModel $presentationModel The presentation model for which to determine whether it holds data.
+     * @param PresentationModel $presentationModel
      *
-     * @return bool Whether the presentation model already holds data.
+     * @return bool
      */
     private function hasData(PresentationModel $presentationModel): bool
     {

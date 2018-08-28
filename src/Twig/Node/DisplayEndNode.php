@@ -12,6 +12,8 @@ use Twig_Node_Module as ModuleNode;
 /**
  * This node is added to the bottom of the display method of a Twig template and is used by Shoot to wrap its contents
  * in a callback.
+ *
+ * @internal
  */
 final class DisplayEndNode extends Node
 {

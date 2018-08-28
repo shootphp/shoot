@@ -10,7 +10,7 @@ use Shoot\Shoot\MiddlewareInterface;
 use Shoot\Shoot\View;
 
 /**
- * Logs each view processed by the pipeline to a PSR-3 compliant logger.
+ * Logs all views being processed by Shoot. It's recommended to add this before any other middleware.
  */
 final class LoggingMiddleware implements MiddlewareInterface
 {
@@ -18,7 +18,9 @@ final class LoggingMiddleware implements MiddlewareInterface
     private $logger;
 
     /**
-     * @param LoggerInterface $logger A PSR-3 compliant logger.
+     * Constructs a new instance of LoggingMiddleware. Requires a PSR-3 compliant logger.
+     *
+     * @param LoggerInterface $logger
      */
     public function __construct(LoggerInterface $logger)
     {
@@ -26,11 +28,14 @@ final class LoggingMiddleware implements MiddlewareInterface
     }
 
     /**
-     * @param View                   $view    The view to be processed by this middleware.
-     * @param ServerRequestInterface $request The current HTTP request being handled.
-     * @param callable               $next    The next middleware to call.
+     * Process the view within the context of the current HTTP request, either before or after calling the next
+     * middleware. Returns the processed view.
      *
-     * @return View The processed view.
+     * @param View                   $view
+     * @param ServerRequestInterface $request
+     * @param callable               $next
+     *
+     * @return View
      */
     public function process(View $view, ServerRequestInterface $request, callable $next): View
     {

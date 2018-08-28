@@ -12,9 +12,9 @@ final class ContainerStub implements ContainerInterface
     /**
      * @param string $id
      *
-     * @throws NotFoundExceptionInterface
-     *
      * @return mixed
+     *
+     * @throws NotFoundExceptionInterface
      */
     public function get($id)
     {

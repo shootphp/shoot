@@ -9,12 +9,19 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Shoot\Shoot\Pipeline;
 
+/**
+ * This HTTP middleware makes sure the request object is always set before you render your templates. Make sure to place
+ * it after any other middleware that might enrich the request object, but before your first call to Twig.
+ */
 final class ShootMiddleware implements MiddlewareInterface
 {
     /** @var Pipeline */
     private $pipeline;
 
     /**
+     * Constructs a new instance of ShootMiddleware. The same instance of the Pipeline as passed into the Twig extension
+     * must be used here.
+     *
      * @param Pipeline $pipeline
      */
     public function __construct(Pipeline $pipeline)

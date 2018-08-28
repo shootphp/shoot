@@ -4,12 +4,15 @@ declare(strict_types=1);
 namespace Shoot\Shoot;
 
 /**
- * Should be implemented by presentation models with a presenter.
+ * When implemented by a presentation model, the PresenterMiddleware will locate and invoke the presenter returned
+ * by this interface.
  */
 interface HasPresenterInterface
 {
     /**
-     * @return string The name by which to resolve the presenter through the DI container.
+     * Returns the name by which to resolve the presenter through the DI container.
+     *
+     * @return string
      */
     public function getPresenterName(): string;
 }
