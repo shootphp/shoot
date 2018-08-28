@@ -8,6 +8,7 @@ use Psr\Log\LoggerInterface;
 use Shoot\Shoot\HasPresenterInterface;
 use Shoot\Shoot\MiddlewareInterface;
 use Shoot\Shoot\View;
+use Throwable;
 
 /**
  * Logs all views being processed by Shoot. It's recommended to add this before any other middleware.
@@ -36,36 +37,47 @@ final class LoggingMiddleware implements MiddlewareInterface
      * @param callable               $next
      *
      * @return View
+     *
+     * @throws Throwable
      */
     public function process(View $view, ServerRequestInterface $request, callable $next): View
     {
-        $startTime = microtime(true);
+        $context = [];
+        $message = $view->getName();
 
-        /** @var View $view */
-        $view = $next($view);
+        try {
+            $startTime = microtime(true);
 
-        $endTime = microtime(true);
+            /** @var View $view */
+            $view = $next($view);
 
-        $presentationModel = $view->getPresentationModel();
+            $endTime = microtime(true);
 
-        $fields = [
-            'presentation_model' => $presentationModel->getName(),
-            'time_taken' => sprintf("%f seconds", $endTime - $startTime),
-            'variables' => $presentationModel->getVariables(),
-        ];
+            $presentationModel = $view->getPresentationModel();
 
-        if ($presentationModel instanceof HasPresenterInterface) {
-            $fields['presenter_name'] = $presentationModel->getPresenterName();
+            $context['presentation_model'] = $presentationModel->getName();
+
+            if ($presentationModel instanceof HasPresenterInterface) {
+                $context['presenter_name'] = $presentationModel->getPresenterName();
+            }
+
+            $context['time_taken'] = sprintf("%f seconds", $endTime - $startTime);
+
+            if ($view->hasSuppressedException()) {
+                $context['exception'] = $view->getSuppressedException();
+
+                $this->logger->warning($message, $context);
+            } else {
+                $this->logger->debug($message, $context);
+            }
+
+            return $view;
+        } catch (Throwable $exception) {
+            $context['exception'] = $exception;
+
+            $this->logger->error($message, $context);
+
+            throw $exception;
         }
-
-        if ($view->hasSuppressedException()) {
-            $fields['exception'] = $view->getSuppressedException();
-
-            $this->logger->warning($view->getName(), $fields);
-        } else {
-            $this->logger->debug($view->getName(), $fields);
-        }
-
-        return $view;
     }
 }

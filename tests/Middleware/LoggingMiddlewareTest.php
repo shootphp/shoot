@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Tests\Middleware;
 
+use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
@@ -78,5 +79,32 @@ final class LoggingMiddlewareTest extends TestCase
 
         $middleware = new LoggingMiddleware($logger);
         $middleware->process($view, $this->request, $this->next);
+    }
+
+    /**
+     * @return void
+     */
+    public function testShouldLogUncaughtExceptions()
+    {
+        $view = ViewFactory::create();
+
+        $next = function () {
+            throw new Exception();
+        };
+
+        /** @var LoggerInterface|MockObject $logger */
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger
+            ->expects($this->once())
+            ->method('error')
+            ->with(
+                $this->equalTo('item.twig'),
+                $this->arrayHasKey('exception')
+            );
+
+        $this->expectException(Exception::class);
+
+        $middleware = new LoggingMiddleware($logger);
+        $middleware->process($view, $this->request, $next);
     }
 }
