@@ -4,11 +4,14 @@ declare(strict_types=1);
 namespace Shoot\Shoot;
 
 /**
- * Holds the variables available to a view.
+ * Represents the data available to a view.
  */
 class PresentationModel
 {
     /**
+     * Constructs an instance of PresentationModel. Takes an associative array of variables to be set on the model. Only
+     * sets variables which have been defined in the model.
+     *
      * @param mixed[] $variables
      */
     final public function __construct(array $variables = [])
@@ -17,7 +20,9 @@ class PresentationModel
     }
 
     /**
-     * @return string The name of the presentation model.
+     * Returns the name of the presentation model.
+     *
+     * @return string
      */
     final public function getName(): string
     {
@@ -25,6 +30,8 @@ class PresentationModel
     }
 
     /**
+     * Returns a single variable, or the given default value it it's missing.
+     *
      * @param string $variable
      * @param mixed  $default
      *
@@ -36,6 +43,8 @@ class PresentationModel
     }
 
     /**
+     * Returns all variables defined in the model.
+     *
      * @return mixed[]
      */
     final public function getVariables(): array
@@ -44,6 +53,8 @@ class PresentationModel
     }
 
     /**
+     * Returns a clone of this presentation model with the new variables set.
+     *
      * @param mixed[] $variables
      *
      * @return PresentationModel

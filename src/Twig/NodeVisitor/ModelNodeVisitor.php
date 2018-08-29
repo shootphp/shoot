@@ -15,18 +15,21 @@ use Twig_Node as Node;
 use Twig_Node_Module as ModuleNode;
 use Twig_NodeVisitorInterface as NodeVisitorInterface;
 
+/**
+ * Walks through model tags to assign presentation models to templates.
+ *
+ * @internal
+ */
 final class ModelNodeVisitor implements FindPresentationModelInterface, NodeVisitorInterface
 {
     /** @var string[] */
     private $presentationModels = [];
 
     /**
-     * Called before child nodes are visited.
-     *
      * @param Node        $node
      * @param Environment $environment
      *
-     * @return Node The modified node.
+     * @return Node
      */
     public function enterNode(Node $node, Environment $environment): Node
     {
@@ -38,12 +41,10 @@ final class ModelNodeVisitor implements FindPresentationModelInterface, NodeVisi
     }
 
     /**
-     * Called after child nodes are visited.
-     *
      * @param Node        $node
      * @param Environment $environment
      *
-     * @return Node The modified node.
+     * @return Node
      */
     public function leaveNode(Node $node, Environment $environment): Node
     {
@@ -65,11 +66,11 @@ final class ModelNodeVisitor implements FindPresentationModelInterface, NodeVisi
     }
 
     /**
-     * Find the presentation model for the given view.
+     * Returns the presentation model for the given view.
      *
-     * @param string $view The name of the view.
+     * @param string $view
      *
-     * @return string The name of the presentation model.
+     * @return string
      */
     public function for(string $view): string
     {
@@ -77,7 +78,7 @@ final class ModelNodeVisitor implements FindPresentationModelInterface, NodeVisi
     }
 
     /**
-     * @return int The priority for this visitor.
+     * @return int
      */
     public function getPriority(): int
     {
@@ -86,14 +87,12 @@ final class ModelNodeVisitor implements FindPresentationModelInterface, NodeVisi
     }
 
     /**
-     * Assign a presentation model to the given view.
-     *
-     * @param string $view              The name of the view.
-     * @param string $presentationModel The name of the presentation model.
-     *
-     * @throws LogicException
+     * @param string $view
+     * @param string $presentationModel
      *
      * @return void
+     *
+     * @throws LogicException
      */
     private function assign(string $view, string $presentationModel)
     {

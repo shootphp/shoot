@@ -6,12 +6,17 @@ namespace Shoot\Shoot\Twig\Node;
 use Twig_Compiler as Compiler;
 use Twig_Node as Node;
 
+/**
+ * Represents the optional tag used to suppress runtime exceptions in templates.
+ *
+ * @internal
+ */
 final class OptionalNode extends Node
 {
     /**
-     * @param Node   $body       The body of the suppressed tag.
-     * @param int    $lineNumber The line number at which the tag occurs in the template.
-     * @param string $tag        The name of the tag.
+     * @param Node   $body
+     * @param int    $lineNumber
+     * @param string $tag
      */
     public function __construct(Node $body, int $lineNumber, string $tag)
     {

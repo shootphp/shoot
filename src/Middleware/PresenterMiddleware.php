@@ -12,7 +12,8 @@ use Shoot\Shoot\PresenterInterface;
 use Shoot\Shoot\View;
 
 /**
- * Resolves presenters as defined by presentation models using a PSR-11 compliant DI container.
+ * Resolves presenters for presentation models implementing the HasPresenterInterface using a PSR-11 compliant
+ * container.
  */
 final class PresenterMiddleware implements MiddlewareInterface
 {
@@ -20,7 +21,10 @@ final class PresenterMiddleware implements MiddlewareInterface
     private $container;
 
     /**
-     * @param ContainerInterface $container A PSR-11 compliant DI container holding the presenters.
+     * Constructs a new instance of PresenterMiddleware. Requires a PSR-11 compliant container capable of resolving
+     * your presenters.
+     *
+     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -28,11 +32,14 @@ final class PresenterMiddleware implements MiddlewareInterface
     }
 
     /**
-     * @param View                   $view    The view to be processed by this middleware.
-     * @param ServerRequestInterface $request The current HTTP request being handled.
-     * @param callable               $next    The next middleware to call.
+     * Process the view within the context of the current HTTP request, either before or after calling the next
+     * middleware. Returns the processed view.
      *
-     * @return View The processed view.
+     * @param View                   $view
+     * @param ServerRequestInterface $request
+     * @param callable               $next
+     *
+     * @return View
      */
     public function process(View $view, ServerRequestInterface $request, callable $next): View
     {
@@ -48,13 +55,11 @@ final class PresenterMiddleware implements MiddlewareInterface
     }
 
     /**
-     * Load the presenter from the container.
+     * @param HasPresenterInterface $hasPresenter
      *
-     * @param HasPresenterInterface $hasPresenter A presentation model which has a presenter defined.
+     * @return PresenterInterface
      *
      * @throws ContainerExceptionInterface
-     *
-     * @return PresenterInterface The presenter as returned by the container.
      */
     private function loadPresenter(HasPresenterInterface $hasPresenter): PresenterInterface
     {

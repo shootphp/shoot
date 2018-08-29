@@ -5,15 +5,17 @@ namespace Shoot\Shoot\Twig\Node;
 
 /**
  * Finds the presentation model for a given view.
+ *
+ * @internal
  */
 interface FindPresentationModelInterface
 {
     /**
-     * Find the presentation model for the given view.
+     * Returns the presentation model for the given view.
      *
-     * @param string $view The name of the view.
+     * @param string $view
      *
-     * @return string The name of the presentation model.
+     * @return string
      */
     public function for(string $view): string;
 }
