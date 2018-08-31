@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Shoot\Shoot;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Shoot\Shoot\Middleware\SuppressionMiddleware;
 
 /**
  * The processing pipeline of Shoot. Holds the middleware that enables Shoot's functionality. It's called from the Twig
@@ -25,6 +26,8 @@ final class Pipeline
      */
     public function __construct(array $middleware = [])
     {
+        $middleware = $this->addSuppressionMiddleware($middleware);
+
         $this->middleware = $this->chainMiddleware($middleware);
     }
 
@@ -67,6 +70,26 @@ final class Pipeline
     /**
      * @param MiddlewareInterface[] $middleware
      *
+     * @return MiddlewareInterface[]
+     *
+     * @deprecated 2.0.0 Should not have been default behaviour. Will be removed as of the next major release.
+     */
+    private function addSuppressionMiddleware(array $middleware): array
+    {
+        foreach ($middleware as $instance) {
+            if ($instance instanceof SuppressionMiddleware) {
+                return $middleware;
+            }
+        }
+
+        $middleware[] = new SuppressionMiddleware();
+
+        return $middleware;
+    }
+
+    /**
+     * @param MiddlewareInterface[] $middleware
+     *
      * @return callable
      */
     private function chainMiddleware(array $middleware): callable
@@ -78,13 +101,9 @@ final class Pipeline
                 return $middleware->process($view, $this->request, $next);
             };
         }, function (View $view): View {
-            try {
-                $view->render();
+            $view->render();
 
-                return $view;
-            } catch (SuppressedException $exception) {
-                return $view->withSuppressedException($exception->getPrevious());
-            }
+            return $view;
         });
     }
 }
