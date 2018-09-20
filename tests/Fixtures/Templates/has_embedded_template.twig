@@ -1,7 +1,3 @@
-{##
- # The embedded template does not match the model of the parent template. For embedded templates, Shoot should allow all
- # variables to pass through.
- #}
 {% model 'Shoot\\Shoot\\Tests\\Fixtures\\Item' %}
 {% embed 'embedded_template.twig' with { title: name } %}
     {% block content %}
