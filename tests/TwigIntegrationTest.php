@@ -10,6 +10,7 @@ use Shoot\Shoot\Extension;
 use Shoot\Shoot\Middleware\PresenterMiddleware;
 use Shoot\Shoot\Pipeline;
 use Shoot\Shoot\Tests\Mocks\ContainerStub;
+use Shoot\Shoot\Twig\PatchingCompiler;
 use Twig_Environment as Environment;
 use Twig_Error_Runtime;
 use Twig_Loader_Filesystem as FilesystemLoader;
@@ -37,6 +38,7 @@ final class TwigIntegrationTest extends TestCase
         $loader = new FilesystemLoader([realpath(__DIR__ . '/Fixtures/Templates')]);
         $twig = new Environment($loader, ['cache' => false, 'strict_variables' => true]);
         $twig->addExtension($extension);
+        $twig->setCompiler(new PatchingCompiler($twig));
 
         $this->pipeline = $pipeline;
         $this->request = $this->createMock(ServerRequestInterface::class);
@@ -93,6 +95,7 @@ final class TwigIntegrationTest extends TestCase
 
         $this->assertSame([
             '# title: item',
+            '## subtitle: subtitle',
             'description',
         ], $output);
     }
@@ -130,6 +133,17 @@ final class TwigIntegrationTest extends TestCase
         $this->assertNotContains('should not be rendered', $output);
         $this->assertContains('not affected', $output);
         $this->assertContains('footer', $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testExtendedTemplatesShouldApplyCorrectModels()
+    {
+        $output = $this->renderTemplate('page.twig');
+
+        $this->assertContains('<title>title</title>', $output);
+        $this->assertContains('<h1>body</h1>', $output);
     }
 
     /**

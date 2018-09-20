@@ -39,17 +39,13 @@ final class DisplayEndNode extends Node
      */
     public function compile(Compiler $compiler)
     {
-        if ($this->module->hasAttribute('is_embedded')) {
-            return;
-        }
-
         $extension = Extension::class;
         $templateName = $this->getTemplateName();
         $view = View::class;
 
         $compiler
             ->raw("\n")
-            ->write("if (\$suppressedException instanceof \\Shoot\\Shoot\\SuppressedException) {\n")
+            ->write("if (\$suppressedException instanceof Shoot\\Shoot\\SuppressedException) {\n")
             ->indent()
             ->write("throw \$suppressedException;\n")
             ->outdent()

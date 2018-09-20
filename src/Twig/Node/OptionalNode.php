@@ -35,14 +35,14 @@ final class OptionalNode extends Node
             ->indent()
             ->subcompile($this->getNode('body'))
             ->outdent()
-            ->write("} catch (\\Twig_Error_Runtime \$exception) {\n")
+            ->write("} catch (Twig_Error_Runtime \$exception) {\n")
             ->indent()
             ->write("if (\$exception->getPrevious() === null) {\n")
             ->indent()
             ->write("throw \$exception;\n")
             ->outdent()
             ->write("}\n\n")
-            ->write("\$suppressedException = new \\Shoot\\Shoot\\SuppressedException(\$exception->getPrevious());\n")
+            ->write("\$suppressedException = new Shoot\\Shoot\\SuppressedException(\$exception->getPrevious());\n")
             ->outdent()
             ->write("}\n\n");
     }

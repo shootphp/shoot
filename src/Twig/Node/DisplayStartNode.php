@@ -43,15 +43,12 @@ final class DisplayStartNode extends Node
      */
     public function compile(Compiler $compiler)
     {
-        if ($this->module->hasAttribute('is_embedded')) {
-            return;
-        }
-
         $presentationModel = $this->findPresentationModel->for($this->getTemplateName());
 
         $compiler
-            ->write("\$presentationModel = new $presentationModel(\$context);\n\n")
-            ->write("\$callback = function (array \$context) use (\$blocks) {\n")
+            ->write("\$presentationModel = new $presentationModel(\$context);\n")
+            ->write("\$originalContext = \$context;\n\n")
+            ->write("\$callback = function (array \$context) use (\$blocks, \$originalContext) {\n")
             ->indent()
             ->write("\$suppressedException = null;\n\n");
     }
