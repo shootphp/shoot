@@ -47,6 +47,6 @@ final class PatchingCompiler extends Compiler
             '/(\$this->displayBlock\(\'[^\']+\', )\$context(, \$blocks\);\n)/',
         ];
 
-        return !is_string($string) ? $string : preg_replace($patterns, '$1array_merge($originalContext, $context)$2', $string);
+        return !is_string($string) ? $string : preg_replace($patterns, '$1array_merge($originalContext ?? [], $context)$2', $string);
     }
 }
