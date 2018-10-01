@@ -15,6 +15,8 @@ use Twig_TokenParserInterface as TokenParserInterface;
 
 /**
  * This extension for Twig will enable the use of Shoot.
+ *
+ * @internal
  */
 final class Extension implements ExtensionInterface
 {

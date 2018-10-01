@@ -6,11 +6,10 @@ namespace Shoot\Shoot\Tests;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Shoot\Shoot\Extension;
+use Shoot\Shoot\Installer;
 use Shoot\Shoot\Middleware\PresenterMiddleware;
 use Shoot\Shoot\Pipeline;
 use Shoot\Shoot\Tests\Mocks\ContainerStub;
-use Shoot\Shoot\Twig\PatchingCompiler;
 use Twig_Environment as Environment;
 use Twig_Error_Runtime;
 use Twig_Loader_Filesystem as FilesystemLoader;
@@ -33,12 +32,11 @@ final class TwigIntegrationTest extends TestCase
     {
         $container = new ContainerStub();
         $pipeline = new Pipeline([new PresenterMiddleware($container)]);
-        $extension = new Extension($pipeline);
+        $installer = new Installer($pipeline);
 
         $loader = new FilesystemLoader([realpath(__DIR__ . '/Fixtures/Templates')]);
         $twig = new Environment($loader, ['cache' => false, 'strict_variables' => true]);
-        $twig->addExtension($extension);
-        $twig->setCompiler(new PatchingCompiler($twig));
+        $twig = $installer->install($twig);
 
         $this->pipeline = $pipeline;
         $this->request = $this->createMock(ServerRequestInterface::class);
