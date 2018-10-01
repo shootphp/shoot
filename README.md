@@ -55,14 +55,14 @@ $ composer require shoot/shoot
 First, set up the pipeline. All views being rendered by Twig pass through it, and are processed by Shoot's middleware.
 For Shoot to be useful, you'll need at least the `PresenterMiddleware`, which takes a DI container as its dependency.
 
-All that's left is then to add the extension to Twig:
+All that's left is then to install Shoot in Twig:
 
 ```php
 $middleware = [new PresenterMiddleware($container)];
 $pipeline = new Pipeline($middleware);
-$extension = new Extension($pipeline);
+$installer = new Installer($pipeline);
 
-$twig->addExtension($extension);
+$twig = $installer->install($twig);
 ```
 
 With Shoot now set up, let's take a look at an example of how you can use it.
