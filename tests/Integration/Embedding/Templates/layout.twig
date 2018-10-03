@@ -1,0 +1,13 @@
+{% model 'Shoot\\Shoot\\Tests\\Integration\\Embedding\\Models\\Layout' %}
+<nav class="{{ navigation_class }}">
+    {% block navigation %}
+        <ul>
+            {% for text, href in links %}
+                <li><a href="{{ href }}">{{ text }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endblock %}
+</nav>
+<main class="{{ main_class }}">
+    {% block main %}{% endblock %}
+</main>

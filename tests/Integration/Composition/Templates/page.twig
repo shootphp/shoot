@@ -1,0 +1,12 @@
+{% model 'Shoot\\Shoot\\Tests\\Integration\\Composition\\Models\\Page' %}
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>page_title</title>
+</head>
+<body>
+<h1>page_title</h1>
+{% include 'item.twig' with item|variables only %}
+</body>
+</html>

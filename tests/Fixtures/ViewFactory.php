@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Tests\Fixtures;
 
+use Shoot\Shoot\HasPresenterInterface;
+use Shoot\Shoot\PresentationModel;
 use Shoot\Shoot\View;
 
 final class ViewFactory
@@ -24,6 +26,16 @@ final class ViewFactory
      */
     public static function createWithCallback(callable $callback): View
     {
-        return new View('item.twig', new Item(), $callback);
+        $presentationModel = new class extends PresentationModel implements HasPresenterInterface
+        {
+            protected $variable = '';
+
+            public function getPresenterName(): string
+            {
+                return 'MockPresenter';
+            }
+        };
+
+        return new View('template.twig', $presentationModel, $callback);
     }
 }
