@@ -1,0 +1,6 @@
+{% model 'Shoot\\Shoot\\Tests\\Integration\\Inheritance\\Models\\Page' %}
+{% extends 'base.twig' %}
+{% block body %}
+    {{ parent() }}
+    <p>{{ content }}</p>
+{% endblock %}
