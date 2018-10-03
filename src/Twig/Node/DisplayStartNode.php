@@ -43,6 +43,10 @@ final class DisplayStartNode extends Node
      */
     public function compile(Compiler $compiler)
     {
+        if ($this->module->hasAttribute('is_embedded')) {
+            return;
+        }
+
         $presentationModel = $this->findPresentationModel->for($this->getTemplateName());
 
         $compiler
