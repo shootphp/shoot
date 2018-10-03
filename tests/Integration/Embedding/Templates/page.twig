@@ -1,7 +1,7 @@
 {% model 'Shoot\\Shoot\\Tests\\Integration\\Embedding\\Models\\Page' %}
 {% extends 'base.twig' %}
 {% block body %}
-    {% embed 'layout.twig' with { main_class: 'main--overriden'} only %}
+    {% embed 'layout.twig' with { main_class: 'main--overriden'} %}
         {% block main %}
             <h1>{{ title }}</h1>
             <p>{{ content }}</p>

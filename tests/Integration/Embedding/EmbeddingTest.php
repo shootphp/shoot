@@ -66,8 +66,6 @@ final class EmbeddingTest extends IntegrationTestCase
      */
     public function testPresentersShouldOnlyBeCalledOnce()
     {
-        $this->markTestSkipped('Presenters should only be called once: currently fails, fix pending.');
-
         $this->pagePresenter
             ->expects($this->once())
             ->method('present');
