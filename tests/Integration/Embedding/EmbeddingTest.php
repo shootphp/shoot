@@ -47,6 +47,7 @@ final class EmbeddingTest extends IntegrationTestCase
     {
         $output = $this->renderTemplate('page.twig');
 
+        $this->assertContains('<title>page_title</title>', $output);
         $this->assertContains('<h1>page_title</h1>', $output);
         $this->assertContains('<p>page_content</p>', $output);
     }
