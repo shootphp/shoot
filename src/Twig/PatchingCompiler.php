@@ -49,6 +49,6 @@ final class PatchingCompiler extends Compiler
 
         return !is_string($string)
             ? $string
-            : preg_replace($patterns, '$1array_merge($originalContext ?? [], $context)$2', $string);
+            : preg_replace($patterns, '$1array_merge($context, $originalContext ?? [])$2', $string);
     }
 }
