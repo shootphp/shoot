@@ -15,7 +15,7 @@ final class Pipeline
     /** @var callable */
     private $middleware;
 
-    /** @var ServerRequestInterface */
+    /** @var ServerRequestInterface|null */
     private $request;
 
     /**
@@ -96,7 +96,7 @@ final class Pipeline
     {
         $middleware = array_reverse($middleware);
 
-        return array_reduce($middleware, function (callable $next, MiddlewareInterface $middleware) {
+        return array_reduce($middleware, function (callable $next, MiddlewareInterface $middleware): callable {
             return function (View $view) use ($middleware, $next): View {
                 return $middleware->process($view, $this->request, $next);
             };
