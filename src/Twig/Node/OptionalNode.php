@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Twig\Node;
 
+use Shoot\Shoot\SuppressedException;
 use Twig_Compiler as Compiler;
+use Twig_Error_Runtime as RuntimeError;
 use Twig_Node as Node;
 
 /**
@@ -30,19 +32,22 @@ final class OptionalNode extends Node
      */
     public function compile(Compiler $compiler)
     {
+        $runtimeErrorClass = RuntimeError::class;
+        $suppressedExceptionClass = SuppressedException::class;
+
         $compiler
             ->write("try {\n")
             ->indent()
             ->subcompile($this->getNode('body'))
             ->outdent()
-            ->write("} catch (Twig_Error_Runtime \$exception) {\n")
+            ->write("} catch ({$runtimeErrorClass} \$exception) {\n")
             ->indent()
             ->write("if (\$exception->getPrevious() === null) {\n")
             ->indent()
             ->write("throw \$exception;\n")
             ->outdent()
             ->write("}\n\n")
-            ->write("\$suppressedException = new Shoot\\Shoot\\SuppressedException(\$exception->getPrevious());\n")
+            ->write("\$suppressedException = new {$suppressedExceptionClass}(\$exception->getPrevious());\n")
             ->outdent()
             ->write("}\n\n");
     }

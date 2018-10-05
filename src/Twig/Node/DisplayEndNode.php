@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Shoot\Shoot\Twig\Node;
 
 use Shoot\Shoot\Extension;
+use Shoot\Shoot\SuppressedException;
 use Shoot\Shoot\View;
 use Twig_Compiler as Compiler;
 use Twig_Node as Node;
@@ -43,13 +44,14 @@ final class DisplayEndNode extends Node
             return;
         }
 
-        $extension = Extension::class;
+        $extensionClass = Extension::class;
+        $suppressedExceptionClass = SuppressedException::class;
         $templateName = $this->getTemplateName();
-        $view = View::class;
+        $viewClass = View::class;
 
         $compiler
             ->raw("\n")
-            ->write("if (\$suppressedException instanceof Shoot\\Shoot\\SuppressedException) {\n")
+            ->write("if (\$suppressedException instanceof {$suppressedExceptionClass}) {\n")
             ->indent()
             ->write("throw \$suppressedException;\n")
             ->outdent()
@@ -58,8 +60,8 @@ final class DisplayEndNode extends Node
             ->write("};\n\n")
             ->write("\$this->env\n")
             ->indent()
-            ->write("->getExtension({$extension}::class)\n")
-            ->write("->process(new {$view}('{$templateName}', \$presentationModel, \$callback));\n")
+            ->write("->getExtension({$extensionClass}::class)\n")
+            ->write("->process(new {$viewClass}('{$templateName}', \$presentationModel, \$callback));\n")
             ->outdent();
     }
 }
