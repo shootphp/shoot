@@ -178,11 +178,7 @@ and the presentation model assigned to the template.
 
 It will fetch the necessary data from the database, look up the correct route to the author's profile and return the
 presentation model updated with its variables set. Shoot then assigns these variables to the template, and Twig takes
-care of rendering it. Job done!
-
-## Limitations
-* Do not define a model for templates from which you intend to extend. Due to how Twig renders its templates, it causes
-the presentation model of a child template to be overwritten by its parent. This is probably not what you want. 
+care of rendering it. Job done! 
 
 ## Changelog
 Please see the [changelog][link-changelog] for more information on what has changed recently.
