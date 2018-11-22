@@ -25,8 +25,10 @@ final class ItemPresenter implements PresenterInterface
             return $presentationModel->withVariables([
                 'throw_logic_exception' => true,
             ]);
+        } elseif ($request->getAttribute('throw_runtime_exception', 'n') === 'y') {
+            throw new RuntimeException('item_exception');
         }
 
-        throw new RuntimeException('item_exception');
+        return $presentationModel;
     }
 }
