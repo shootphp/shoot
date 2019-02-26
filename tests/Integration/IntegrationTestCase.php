@@ -33,10 +33,7 @@ abstract class IntegrationTestCase extends TestCase
     /** @var Environment */
     private $twig;
 
-    /**
-     * @return void
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         if (empty($this->templateDirectory)) {
             throw new LogicException('Template directory is not set in ' . static::class);
@@ -57,12 +54,6 @@ abstract class IntegrationTestCase extends TestCase
         parent::setUp();
     }
 
-    /**
-     * @param string  $template
-     * @param mixed[] $variables
-     *
-     * @return string[]
-     */
     final protected function renderTemplate(string $template, array $variables = []): array
     {
         return $this->pipeline->withRequest($this->request, function () use ($template, $variables): array {
@@ -75,13 +66,7 @@ abstract class IntegrationTestCase extends TestCase
         });
     }
 
-    /**
-     * @param string $id
-     * @param object $service
-     *
-     * @return void
-     */
-    final protected function addToContainer(string $id, $service)
+    final protected function addToContainer(string $id, object $service): void
     {
         if (isset($this->container[$id])) {
             throw new LogicException("Service with ID '{$id}' already exists in container");
@@ -90,9 +75,6 @@ abstract class IntegrationTestCase extends TestCase
         $this->container[$id] = $service;
     }
 
-    /**
-     * @return ContainerInterface
-     */
     private function createContainer(): ContainerInterface
     {
         return new class($this->container) implements ContainerInterface

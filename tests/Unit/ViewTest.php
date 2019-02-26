@@ -13,10 +13,7 @@ use stdClass;
 
 final class ViewTest extends TestCase
 {
-    /**
-     * @return void
-     */
-    public function testShouldNotAllowEmptyNames()
+    public function testShouldNotAllowEmptyNames(): void
     {
         $presentationModel = new PresentationModel();
         $callback = function () {
@@ -28,10 +25,7 @@ final class ViewTest extends TestCase
         new View('', $presentationModel, $callback);
     }
 
-    /**
-     * @return void
-     */
-    public function testShouldExecuteCallback()
+    public function testShouldExecuteCallback(): void
     {
         /** @var callable|MockObject $callback */
         $callback = $this

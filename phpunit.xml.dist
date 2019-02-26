@@ -10,7 +10,7 @@
         </whitelist>
     </filter>
     <testsuites>
-        <testsuite>
+        <testsuite name="All tests">
             <directory>tests/</directory>
         </testsuite>
     </testsuites>

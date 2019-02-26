@@ -17,20 +17,14 @@ final class PipelineTest extends TestCase
     /** @var ServerRequestInterface|MockObject */
     private $request;
 
-    /**
-     * @return void
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->createMock(ServerRequestInterface::class);
 
         parent::setUp();
     }
 
-    /**
-     * @return void
-     */
-    public function testShouldCallMiddleware()
+    public function testShouldCallMiddleware(): void
     {
         $view = ViewFactory::create();
 
@@ -47,10 +41,7 @@ final class PipelineTest extends TestCase
         });
     }
 
-    /**
-     * @return void
-     */
-    public function testShouldRenderView()
+    public function testShouldRenderView(): void
     {
         $pipeline = new Pipeline();
 
@@ -71,10 +62,7 @@ final class PipelineTest extends TestCase
         });
     }
 
-    /**
-     * @return void
-     */
-    public function testShouldThrowIfNoRequestWasSet()
+    public function testShouldThrowIfNoRequestWasSet(): void
     {
         $pipeline = new Pipeline();
         $view = ViewFactory::create();
