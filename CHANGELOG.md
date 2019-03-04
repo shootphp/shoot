@@ -1,6 +1,24 @@
 # Changelog
 All notable changes to Shoot will be documented in this file.
 
+## [2.0.0] - 2019-03-04
+### Added
+- Documentation on nesting presentation models and the `optional` tag.
+- An `Installer` class which sets up Shoot for an instance of Twig.
+
+### Changed
+- Shoot now requires PHP 7.2.
+- The Twig dependency has been bumped to v2.6.
+- PHPUnit has been bumped to v8.0, and all tests have been updated accordingly.
+- The `SuppressionMiddleware` is no longer enabled by the default. You'll have to pass it to the `Pipeline` constructor
+along with any other middleware you use.
+- The `LoggingMiddleware` now also logs errors. Kind of odd it did not do that before.
+
+### Fixed
+- The optional tag would still output any contents from before the exception was thrown. This is now fixed.
+- Models now work as expected when using extends, embed and blocks – removing what was previously a limitation of Shoot.
+
+
 ## [1.0.0] - 2018-08-27
 ### Added
 - The `optional` tag was added. This allows runtime exceptions to be suppressed so parts which are not essential to the
@@ -14,7 +32,7 @@ page can be left out in case of failure.
 - The `getPresenter` method of `HasPresenterInterface` was renamed to `getPresenterName` as it more accurately describes
 its purpose. 
 - `HasDataTrait` has been moved to a `Utilities` namespace.
-- The Twig dependency has been bumped to v2.5
+- The Twig dependency has been bumped to v2.5.
 - Lots of housekeeping in code and documentation.
 
 ### Deprecated
