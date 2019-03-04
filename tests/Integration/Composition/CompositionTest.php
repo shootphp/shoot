@@ -7,8 +7,12 @@ use Shoot\Shoot\Tests\Integration\IntegrationTestCase;
 
 final class CompositionTest extends IntegrationTestCase
 {
-    /** @var string */
-    protected $templateDirectory = __DIR__ . '/Templates';
+    protected function setUp(): void
+    {
+        $this->setTemplateDirectory(__DIR__ . '/Templates');
+
+        parent::setUp();
+    }
 
     public function testVariablesFilterShouldPassOnModelVariablesToIncludedTemplate(): void
     {

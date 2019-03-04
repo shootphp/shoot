@@ -7,13 +7,14 @@ use Shoot\Shoot\Tests\Integration\IntegrationTestCase;
 
 final class ModelsTest extends IntegrationTestCase
 {
-    /** @var string */
-    protected $templateDirectory = __DIR__ . '/Templates';
+    protected function setUp(): void
+    {
+        $this->setTemplateDirectory(__DIR__ . '/Templates');
 
-    /**
-     * @return void
-     */
-    public function testVariablesDefinedInTheModelShouldBeAvailableToTheTemplate()
+        parent::setUp();
+    }
+
+    public function testVariablesDefinedInTheModelShouldBeAvailableToTheTemplate(): void
     {
         $output = $this->renderTemplate('page.twig');
 
@@ -21,10 +22,7 @@ final class ModelsTest extends IntegrationTestCase
         $this->assertContains('<p>page_content</p>', $output);
     }
 
-    /**
-     * @return void
-     */
-    public function testDefiningMultipleModelsShouldThrowAnException()
+    public function testDefiningMultipleModelsShouldThrowAnException(): void
     {
         $this->expectExceptionMessage('A presentation model has already been assigned');
 

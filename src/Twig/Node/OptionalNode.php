@@ -30,7 +30,7 @@ final class OptionalNode extends Node
      *
      * @return void
      */
-    public function compile(Compiler $compiler)
+    public function compile(Compiler $compiler): void
     {
         $runtimeErrorClass = RuntimeError::class;
         $suppressedExceptionClass = SuppressedException::class;

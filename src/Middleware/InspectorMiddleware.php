@@ -40,7 +40,7 @@ final class InspectorMiddleware implements MiddlewareInterface
      *
      * @return void
      */
-    private function value($value, string $label = '')
+    private function value($value, string $label = ''): void
     {
         if (is_scalar($value)) {
             $this->scalar($value, $label);
@@ -57,7 +57,7 @@ final class InspectorMiddleware implements MiddlewareInterface
      *
      * @return void
      */
-    private function scalar($scalar, string $label = '')
+    private function scalar($scalar, string $label = ''): void
     {
         if (is_bool($scalar)) {
             $scalar = $scalar ? 'true' : 'false';
@@ -80,7 +80,7 @@ final class InspectorMiddleware implements MiddlewareInterface
      *
      * @return void
      */
-    private function iterable(array $iterable, string $label = '')
+    private function iterable(array $iterable, string $label = ''): void
     {
         if ($label === '') {
             $label = '...';
@@ -105,7 +105,7 @@ final class InspectorMiddleware implements MiddlewareInterface
      *
      * @return void
      */
-    private function object($object, string $label = '')
+    private function object($object, string $label = ''): void
     {
         if ($object instanceof PresentationModel) {
             $this->presentationModel($object, $label);
@@ -121,7 +121,7 @@ final class InspectorMiddleware implements MiddlewareInterface
      *
      * @return void
      */
-    private function view(View $view)
+    private function view(View $view): void
     {
         $this->group($view->getName(), false);
         $this->presentationModel($view->getPresentationModel(), 'presentationModel');
@@ -134,7 +134,7 @@ final class InspectorMiddleware implements MiddlewareInterface
      *
      * @return void
      */
-    private function presentationModel(PresentationModel $presentationModel, string $label = '')
+    private function presentationModel(PresentationModel $presentationModel, string $label = ''): void
     {
         if ($label === '') {
             $label = $presentationModel->getName();
@@ -167,7 +167,7 @@ final class InspectorMiddleware implements MiddlewareInterface
      *
      * @return void
      */
-    private function group(string $label, bool $collapsed = true)
+    private function group(string $label, bool $collapsed = true): void
     {
         $label = $this->escape($label);
 
@@ -181,7 +181,7 @@ final class InspectorMiddleware implements MiddlewareInterface
     /**
      * @return void
      */
-    private function groupEnd()
+    private function groupEnd(): void
     {
         echo 'console.groupEnd();';
     }
@@ -189,7 +189,7 @@ final class InspectorMiddleware implements MiddlewareInterface
     /**
      * @return void
      */
-    private function script()
+    private function script(): void
     {
         echo '<script>';
     }
@@ -197,7 +197,7 @@ final class InspectorMiddleware implements MiddlewareInterface
     /**
      * @return void
      */
-    private function scriptEnd()
+    private function scriptEnd(): void
     {
         echo '</script>';
     }
