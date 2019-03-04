@@ -21,10 +21,7 @@ final class LoggingMiddlewareTest extends TestCase
     /** @var ServerRequestInterface|MockObject */
     private $request;
 
-    /**
-     * @return void
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->createMock(ServerRequestInterface::class);
         $this->next = function (View $view): View {
@@ -34,10 +31,7 @@ final class LoggingMiddlewareTest extends TestCase
         parent::setUp();
     }
 
-    /**
-     * @return void
-     */
-    public function testShouldLogBasicDebugInformation()
+    public function testShouldLogBasicDebugInformation(): void
     {
         $view = ViewFactory::create();
 
@@ -62,10 +56,7 @@ final class LoggingMiddlewareTest extends TestCase
         $middleware->process($view, $this->request, $this->next);
     }
 
-    /**
-     * @return void
-     */
-    public function testShouldLogSuppressedExceptions()
+    public function testShouldLogSuppressedExceptions(): void
     {
         $view = ViewFactory::create()->withSuppressedException(new RuntimeException());
 
@@ -83,10 +74,7 @@ final class LoggingMiddlewareTest extends TestCase
         $middleware->process($view, $this->request, $this->next);
     }
 
-    /**
-     * @return void
-     */
-    public function testShouldLogUncaughtExceptions()
+    public function testShouldLogUncaughtExceptions(): void
     {
         $view = ViewFactory::create();
 

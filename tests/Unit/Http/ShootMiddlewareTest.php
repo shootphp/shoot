@@ -15,10 +15,7 @@ use Shoot\Shoot\Tests\Fixtures\ViewFactory;
 
 final class ShootMiddlewareTest extends TestCase
 {
-    /**
-     * @return void
-     */
-    public function testHttpRequestShouldBeSetOnPipeline()
+    public function testHttpRequestShouldBeSetOnPipeline(): void
     {
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->createMock(ServerRequestInterface::class);

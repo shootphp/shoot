@@ -16,10 +16,7 @@ use Twig_Test as TwigTest;
 
 final class ExtensionTest extends TestCase
 {
-    /**
-     * @return void
-     */
-    public function testExtensionShouldDelegateProcessingToPipeline()
+    public function testExtensionShouldDelegateProcessingToPipeline(): void
     {
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->createMock(ServerRequestInterface::class);
@@ -40,10 +37,7 @@ final class ExtensionTest extends TestCase
         });
     }
 
-    /**
-     * @return void
-     */
-    public function testExtensionShouldIncludeVariablesFilter()
+    public function testExtensionShouldIncludeVariablesFilter(): void
     {
         $extension = new Extension(new Pipeline());
         $presentationModel = new PresentationModel(['variable' => 'variable']);
@@ -61,15 +55,12 @@ final class ExtensionTest extends TestCase
         /** @var mixed[] $variables */
         $variables = $callback($presentationModel);
 
-        $this->assertInternalType('array', $variables);
+        $this->assertIsArray($variables);
         $this->assertCount(1, $variables);
         $this->assertArrayHasKey('variable', $variables);
     }
 
-    /**
-     * @return void
-     */
-    public function testExtensionShouldIncludeModelTest()
+    public function testExtensionShouldIncludeModelTest(): void
     {
         $extension = new Extension(new Pipeline());
         $presentationModel = new PresentationModel();

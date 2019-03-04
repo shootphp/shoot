@@ -12,10 +12,7 @@ use Shoot\Shoot\View;
 
 final class InspectorMiddlewareTest extends TestCase
 {
-    /**
-     * @return void
-     */
-    public function testShouldLogDebugInformationToConsole()
+    public function testShouldLogDebugInformationToConsole(): void
     {
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->createMock(ServerRequestInterface::class);

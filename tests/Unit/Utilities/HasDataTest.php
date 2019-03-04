@@ -21,10 +21,7 @@ final class HasDataTest extends TestCase
     /** @var ServerRequestInterface|MockObject */
     private $request;
 
-    /**
-     * @return void
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->presenter = new class implements PresenterInterface
         {
@@ -52,20 +49,14 @@ final class HasDataTest extends TestCase
         parent::setUp();
     }
 
-    /**
-     * @return void
-     */
-    public function testHasDataShouldReturnFalseForEmptyPresentationModels()
+    public function testHasDataShouldReturnFalseForEmptyPresentationModels(): void
     {
         $presentationModel = $this->presenter->present($this->request, $this->presentationModel);
 
         $this->assertEquals('does_not_have_data', $presentationModel->getVariable('has_data'));
     }
 
-    /**
-     * @return void
-     */
-    public function testHasDataShouldReturnTrueForNonEmptyPresentationModels()
+    public function testHasDataShouldReturnTrueForNonEmptyPresentationModels(): void
     {
         $presentationModel = $this->presenter->present(
             $this->request,

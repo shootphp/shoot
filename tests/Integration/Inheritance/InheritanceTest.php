@@ -10,10 +10,7 @@ final class InheritanceTest extends IntegrationTestCase
     /** @var string */
     protected $templateDirectory = __DIR__ . '/Templates';
 
-    /**
-     * @return void
-     */
-    public function testShouldRenderBaseTemplateWithPlaceholders()
+    public function testShouldRenderBaseTemplateWithPlaceholders(): void
     {
         $output = $this->renderTemplate('base.twig');
 
@@ -22,10 +19,7 @@ final class InheritanceTest extends IntegrationTestCase
         $this->assertContains('<p>base_footer</p>', $output);
     }
 
-    /**
-     * @return void
-     */
-    public function testShouldRenderChildTemplateWithOverriddenVariables()
+    public function testShouldRenderChildTemplateWithOverriddenVariables(): void
     {
         $output = $this->renderTemplate('page.twig');
 

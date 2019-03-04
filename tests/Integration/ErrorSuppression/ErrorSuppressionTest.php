@@ -10,7 +10,7 @@ final class ErrorSuppressionTest extends IntegrationTestCase
     /** @var string */
     protected $templateDirectory = __DIR__ . '/Templates';
 
-    public function testTemplateShouldRenderIfNoExceptionIsThrown()
+    public function testTemplateShouldRenderIfNoExceptionIsThrown(): void
     {
         $output = $this->renderTemplate('page.twig');
 
@@ -21,10 +21,7 @@ final class ErrorSuppressionTest extends IntegrationTestCase
         $this->assertContains('<p>page_footer</p>', $output);
     }
 
-    /**
-     * @return void
-     */
-    public function testIncludedTemplateShouldThrowAnException()
+    public function testIncludedTemplateShouldThrowAnException(): void
     {
         $this->expectExceptionMessage('item_exception');
 
@@ -38,10 +35,7 @@ final class ErrorSuppressionTest extends IntegrationTestCase
         $this->renderTemplate('item.twig');
     }
 
-    /**
-     * @return void
-     */
-    public function testOptionalBlocksShouldDiscardTheirContentsOnRuntimeExceptions()
+    public function testOptionalBlocksShouldDiscardTheirContentsOnRuntimeExceptions(): void
     {
         $this->request
             ->method('getAttribute')
@@ -59,10 +53,7 @@ final class ErrorSuppressionTest extends IntegrationTestCase
         $this->assertContains('<p>page_footer</p>', $output);
     }
 
-    /**
-     * @return void
-     */
-    public function testOptionalBlocksShouldNotSuppressLogicExceptions()
+    public function testOptionalBlocksShouldNotSuppressLogicExceptions(): void
     {
         $this->expectExceptionMessage('Variable "unknown_variable" does not exist');
 

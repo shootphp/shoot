@@ -24,10 +24,7 @@ final class SuppressionMiddlewareTest extends TestCase
     /** @var ServerRequestInterface|MockObject */
     private $request;
 
-    /**
-     * @return void
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->middleware = new SuppressionMiddleware();
 
@@ -42,10 +39,7 @@ final class SuppressionMiddlewareTest extends TestCase
         parent::setUp();
     }
 
-    /**
-     * @return void
-     */
-    public function testShouldCatchSuppressedExceptionAndAssignToView()
+    public function testShouldCatchSuppressedExceptionAndAssignToView(): void
     {
         $view = ViewFactory::createWithCallback(function () {
             throw new SuppressedException(new Exception());
@@ -58,10 +52,7 @@ final class SuppressionMiddlewareTest extends TestCase
         $this->assertTrue($view->hasSuppressedException());
     }
 
-    /**
-     * @return void
-     */
-    public function testShouldIgnoreAllOtherExceptions()
+    public function testShouldIgnoreAllOtherExceptions(): void
     {
         $view = ViewFactory::createWithCallback(function () {
             throw new Exception();

@@ -28,10 +28,7 @@ final class PresenterMiddlewareTest extends TestCase
     /** @var View */
     private $view;
 
-    /**
-     * @return void
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         $presenter = new class implements PresenterInterface
         {
@@ -64,10 +61,7 @@ final class PresenterMiddlewareTest extends TestCase
         parent::setUp();
     }
 
-    /**
-     * @return void
-     */
-    public function testShouldLoadPresenterIfPresentationModelHasPresenter()
+    public function testShouldLoadPresenterIfPresentationModelHasPresenter(): void
     {
         $this->assertEmpty($this->view->getPresentationModel()->getVariable('variable', ''));
 

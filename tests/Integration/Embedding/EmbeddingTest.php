@@ -15,10 +15,7 @@ final class EmbeddingTest extends IntegrationTestCase
     /** @var string */
     protected $templateDirectory = __DIR__ . '/Templates';
 
-    /**
-     * @return void
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->pagePresenter = $this->createMock(PresenterInterface::class);
         $this->pagePresenter
@@ -30,20 +27,14 @@ final class EmbeddingTest extends IntegrationTestCase
         parent::setUp();
     }
 
-    /**
-     * @return void
-     */
-    public function testEmbeddedTemplatesShouldHaveTheirPresentersInvoked()
+    public function testEmbeddedTemplatesShouldHaveTheirPresentersInvoked(): void
     {
         $output = $this->renderTemplate('page.twig');
 
         $this->assertContains('<li><a href="/">Home</a></li>', $output);
     }
 
-    /**
-     * @return void
-     */
-    public function testOverriddenBlocksShouldReceiveVariablesFromParent()
+    public function testOverriddenBlocksShouldReceiveVariablesFromParent(): void
     {
         $output = $this->renderTemplate('page.twig');
 
@@ -52,20 +43,14 @@ final class EmbeddingTest extends IntegrationTestCase
         $this->assertContains('<p>page_content</p>', $output);
     }
 
-    /**
-     * @return void
-     */
-    public function testEmbeddedTemplatesShouldReceiveVariablesPassedAsArguments()
+    public function testEmbeddedTemplatesShouldReceiveVariablesPassedAsArguments(): void
     {
         $output = $this->renderTemplate('page.twig');
 
         $this->assertContains('<main class="main--overriden">', $output);
     }
 
-    /**
-     * @return void
-     */
-    public function testPresentersShouldOnlyBeCalledOnce()
+    public function testPresentersShouldOnlyBeCalledOnce(): void
     {
         $this->pagePresenter
             ->expects($this->once())

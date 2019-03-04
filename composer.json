@@ -27,15 +27,15 @@
         "test": "phpunit"
     },
     "require": {
-        "php": "^7.0",
+        "php": "^7.2",
         "psr/container": "^1.0",
         "psr/http-message": "^1.0",
         "psr/http-server-middleware": "^1.0",
-        "psr/log": "^1.0",
-        "twig/twig": "^2.5"
+        "psr/log": "^1.1",
+        "twig/twig": "^2.6"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.5"
+        "phpunit/phpunit": "^8.0"
     },
     "autoload": {
         "psr-4": {

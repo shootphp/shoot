@@ -10,10 +10,7 @@ final class CompositionTest extends IntegrationTestCase
     /** @var string */
     protected $templateDirectory = __DIR__ . '/Templates';
 
-    /**
-     * @return void
-     */
-    public function testVariablesFilterShouldPassOnModelVariablesToIncludedTemplate()
+    public function testVariablesFilterShouldPassOnModelVariablesToIncludedTemplate(): void
     {
         $output = $this->renderTemplate('page.twig');
 

@@ -9,10 +9,7 @@ use TypeError;
 
 final class PresentationModelTest extends TestCase
 {
-    /**
-     * @return void
-     */
-    public function testGenericPresentationModelsShouldOnlyAllowStringVariableNames()
+    public function testGenericPresentationModelsShouldOnlyAllowStringVariableNames(): void
     {
         $this->expectException(TypeError::class);
 
@@ -21,10 +18,7 @@ final class PresentationModelTest extends TestCase
         ]);
     }
 
-    /**
-     * @return void
-     */
-    public function testSpecificPresentationModelsShouldOnlySetDefinedVariables()
+    public function testSpecificPresentationModelsShouldOnlySetDefinedVariables(): void
     {
         $presentationModel = new class ([
             'name' => 'name',
@@ -40,10 +34,7 @@ final class PresentationModelTest extends TestCase
         $this->assertArrayNotHasKey('non_existing_variable', $variables);
     }
 
-    /**
-     * @return void
-     */
-    public function testGetVariableShouldReturnValueOfVariable()
+    public function testGetVariableShouldReturnValueOfVariable(): void
     {
         $presentationModel = new PresentationModel([
             'name' => 'name',
@@ -52,10 +43,7 @@ final class PresentationModelTest extends TestCase
         $this->assertSame('name', $presentationModel->getVariable('name', 'default'));
     }
 
-    /**
-     * @return void
-     */
-    public function testGetVariableShouldReturnDefaultValueIfVariableDoesNotExist()
+    public function testGetVariableShouldReturnDefaultValueIfVariableDoesNotExist(): void
     {
         $presentationModel = new PresentationModel();
 
