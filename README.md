@@ -7,7 +7,7 @@ Shoot is an extension for [Twig][link-twig], a popular template engine for PHP. 
 your templates more manageable. Think of Shoot as a DI container for template data. 
 
 ## Prerequisites
-Shoot assumes you're using PHP 7 and Twig to render templates in a [PSR-7][link-psr7] HTTP context. It also needs a
+Shoot assumes you're using PHP 7.2 and Twig to render templates in a [PSR-7][link-psr7] HTTP context. It also needs a
 [PSR-11][link-psr11] compatible DI container.
 
 Although not a requirement, a framework with support for [PSR-15][link-psr15] HTTP middleware does make your life a
@@ -39,7 +39,7 @@ rendering your templates and Shoot loads the data as needed. Enjoy this ASCII il
 ```
 
 For this to work, Shoot introduces a few concepts:
-* _Presentation models_ – Think of them as data contracts for your templates, ie. _Views_.
+* _Presentation models_ – Think of them as data contracts for your templates, i.e. _Views_.
 * _Presenters_ – These do the actual work. A presenter is coupled to a specific presentation model, and loads just the
 data it needs. These presenters are automatically invoked by Shoot as your templates are rendered.
 * _Middleware_ – As each template is rendered, it passes through Shoot's middleware pipeline. Invoking the presenters is

@@ -40,7 +40,7 @@ final class Extension implements ExtensionInterface
      *
      * @internal
      */
-    public function process(View $view)
+    public function process(View $view): void
     {
         $this->pipeline->process($view);
     }

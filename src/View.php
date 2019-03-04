@@ -49,7 +49,7 @@ final class View
      *
      * @internal
      */
-    public function render()
+    public function render(): void
     {
         call_user_func($this->callback, $this->presentationModel->getVariables());
     }
@@ -94,7 +94,7 @@ final class View
      *
      * @return Throwable|null
      */
-    public function getSuppressedException()
+    public function getSuppressedException(): ?Throwable
     {
         return $this->suppressedException;
     }
@@ -116,7 +116,7 @@ final class View
      *
      * @return View
      */
-    public function withSuppressedException(Throwable $exception = null): self
+    public function withSuppressedException(?Throwable $exception): self
     {
         $new = clone $this;
         $new->suppressedException = $exception;

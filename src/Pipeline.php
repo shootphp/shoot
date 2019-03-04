@@ -26,8 +26,6 @@ final class Pipeline
      */
     public function __construct(array $middleware = [])
     {
-        $middleware = $this->addSuppressionMiddleware($middleware);
-
         $this->middleware = $this->chainMiddleware($middleware);
     }
 
@@ -58,33 +56,13 @@ final class Pipeline
      *
      * @internal
      */
-    public function process(View $view)
+    public function process(View $view): void
     {
         if ($this->request === null) {
             throw new MissingRequestException('Cannot process a view without a request set. This method should be called from the callback passed to Pipeline::withRequest');
         }
 
         call_user_func($this->middleware, $view);
-    }
-
-    /**
-     * @param MiddlewareInterface[] $middleware
-     *
-     * @return MiddlewareInterface[]
-     *
-     * @deprecated 2.0.0 Should not have been default behaviour. Will be removed as of the next major release.
-     */
-    private function addSuppressionMiddleware(array $middleware): array
-    {
-        foreach ($middleware as $instance) {
-            if ($instance instanceof SuppressionMiddleware) {
-                return $middleware;
-            }
-        }
-
-        $middleware[] = new SuppressionMiddleware();
-
-        return $middleware;
     }
 
     /**

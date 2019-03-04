@@ -94,7 +94,7 @@ final class ModelNodeVisitor implements FindPresentationModelInterface, NodeVisi
      *
      * @throws LogicException
      */
-    private function assign(string $view, string $presentationModel)
+    private function assign(string $view, string $presentationModel): void
     {
         if (isset($this->presentationModels[$view])) {
             throw new ModelAlreadyAssignedException("A presentation model has already been assigned to {$view}");

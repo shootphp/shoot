@@ -3,12 +3,18 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Tests\Integration\ErrorSuppression;
 
+use Shoot\Shoot\Middleware\SuppressionMiddleware;
 use Shoot\Shoot\Tests\Integration\IntegrationTestCase;
 
 final class ErrorSuppressionTest extends IntegrationTestCase
 {
-    /** @var string */
-    protected $templateDirectory = __DIR__ . '/Templates';
+    protected function setUp(): void
+    {
+        $this->addMiddleware(new SuppressionMiddleware());
+        $this->setTemplateDirectory(__DIR__ . '/Templates');
+
+        parent::setUp();
+    }
 
     public function testTemplateShouldRenderIfNoExceptionIsThrown(): void
     {
@@ -25,7 +31,7 @@ final class ErrorSuppressionTest extends IntegrationTestCase
     {
         $this->expectExceptionMessage('item_exception');
 
-        $this->request
+        $this->getRequestMock()
             ->method('getAttribute')
             ->will($this->returnValueMap([
                 ['throw_logic_exception', 'n', 'n'],
@@ -37,7 +43,7 @@ final class ErrorSuppressionTest extends IntegrationTestCase
 
     public function testOptionalBlocksShouldDiscardTheirContentsOnRuntimeExceptions(): void
     {
-        $this->request
+        $this->getRequestMock()
             ->method('getAttribute')
             ->will($this->returnValueMap([
                 ['throw_logic_exception', 'n', 'n'],
@@ -57,7 +63,7 @@ final class ErrorSuppressionTest extends IntegrationTestCase
     {
         $this->expectExceptionMessage('Variable "unknown_variable" does not exist');
 
-        $this->request
+        $this->getRequestMock()
             ->method('getAttribute')
             ->will($this->returnValueMap([
                 ['throw_logic_exception', 'n', 'y'],

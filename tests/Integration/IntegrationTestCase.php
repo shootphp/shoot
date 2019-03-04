@@ -12,6 +12,7 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Shoot\Shoot\Installer;
 use Shoot\Shoot\Middleware\PresenterMiddleware;
+use Shoot\Shoot\MiddlewareInterface;
 use Shoot\Shoot\Pipeline;
 use Twig_Environment as Environment;
 use Twig_Loader_Filesystem as FilesystemLoader;
@@ -21,14 +22,17 @@ abstract class IntegrationTestCase extends TestCase
     /** @var mixed */
     private $container = [];
 
+    /** @var MiddlewareInterface[] */
+    private $middleware = [];
+
     /** @var Pipeline */
-    protected $pipeline;
+    private $pipeline;
 
     /** @var ServerRequestInterface|MockObject */
-    protected $request;
+    private $request;
 
     /** @var string */
-    protected $templateDirectory = '';
+    private $templateDirectory = '';
 
     /** @var Environment */
     private $twig;
@@ -40,7 +44,7 @@ abstract class IntegrationTestCase extends TestCase
         }
 
         $container = $this->createContainer();
-        $pipeline = new Pipeline([new PresenterMiddleware($container)]);
+        $pipeline = new Pipeline(array_merge([new PresenterMiddleware($container)], $this->middleware));
         $installer = new Installer($pipeline);
 
         $loader = new FilesystemLoader([realpath($this->templateDirectory)]);
@@ -52,6 +56,25 @@ abstract class IntegrationTestCase extends TestCase
         $this->twig = $twig;
 
         parent::setUp();
+    }
+
+    final protected function addMiddleware(MiddlewareInterface $middleware): void
+    {
+        $this->middleware[] = $middleware;
+    }
+
+    final protected function addToContainer(string $id, object $service): void
+    {
+        if (isset($this->container[$id])) {
+            throw new LogicException("Service with ID '{$id}' already exists in container");
+        }
+
+        $this->container[$id] = $service;
+    }
+
+    final protected function getRequestMock(): MockObject
+    {
+        return $this->request;
     }
 
     final protected function renderTemplate(string $template, array $variables = []): array
@@ -66,13 +89,9 @@ abstract class IntegrationTestCase extends TestCase
         });
     }
 
-    final protected function addToContainer(string $id, object $service): void
+    final protected function setTemplateDirectory(string $templateDirectory): void
     {
-        if (isset($this->container[$id])) {
-            throw new LogicException("Service with ID '{$id}' already exists in container");
-        }
-
-        $this->container[$id] = $service;
+        $this->templateDirectory = $templateDirectory;
     }
 
     private function createContainer(): ContainerInterface

@@ -12,9 +12,6 @@ final class EmbeddingTest extends IntegrationTestCase
     /** @var PresenterInterface|MockObject */
     private $pagePresenter;
 
-    /** @var string */
-    protected $templateDirectory = __DIR__ . '/Templates';
-
     protected function setUp(): void
     {
         $this->pagePresenter = $this->createMock(PresenterInterface::class);
@@ -23,6 +20,7 @@ final class EmbeddingTest extends IntegrationTestCase
             ->will($this->returnArgument(1));
 
         $this->addToContainer('PagePresenter', $this->pagePresenter);
+        $this->setTemplateDirectory(__DIR__ . '/Templates');
 
         parent::setUp();
     }

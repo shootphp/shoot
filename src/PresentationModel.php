@@ -72,7 +72,7 @@ class PresentationModel
      *
      * @return void
      */
-    private function setVariables(array $variables)
+    private function setVariables(array $variables): void
     {
         foreach ($variables as $variable => $value) {
             if ($this->variableExists($variable)) {
