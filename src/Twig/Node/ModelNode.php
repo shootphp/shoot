@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Twig\Node;
 
-use Twig_Node as Node;
+use Twig\Node\Node;
 
 /**
  * Represents the model tag used to assign a presentation model to a view.

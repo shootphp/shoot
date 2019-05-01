@@ -35,11 +35,7 @@ final class View
      */
     public function __construct(string $name, PresentationModel $presentationModel, callable $callback)
     {
-        if ($name === '') {
-            throw new InvalidArgumentException('The name of a view cannot be empty');
-        }
-
-        $this->name = $name;
+        $this->name = $name !== '' ? $name : 'unknown template';
         $this->presentationModel = $presentationModel;
         $this->callback = $callback;
     }

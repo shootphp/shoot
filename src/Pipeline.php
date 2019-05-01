@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Shoot\Shoot;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Shoot\Shoot\Middleware\SuppressionMiddleware;
 
 /**
  * The processing pipeline of Shoot. Holds the middleware that enables Shoot's functionality. It's called from the Twig

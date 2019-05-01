@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to Shoot will be documented in this file.
 
+## [3.0.0] - 2019-05-01
+### Changed
+- Shoot now requires Twig v2.9. In addition, it's now also pinned to this minor version, as Twig doesn't seem to follow
+SemVer with regards to non-breaking changes in its APIs. As this on its own is a breaking change for Shoot, this
+warrants a major version bump.
+
+### Fixed
+- Compatibility issues with Twig v2.9 have been fixed.
+
 ## [2.0.0] - 2019-03-04
 ### Added
 - Documentation on nesting presentation models and the `optional` tag.

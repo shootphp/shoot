@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Twig;
 
-use Twig_Compiler as Compiler;
+use Twig\Compiler;
 
 /**
  * This compiler patches a few crucial lines in some core Twig classes. It allows Shoot to be used with extend, embed,

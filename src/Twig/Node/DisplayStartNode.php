@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Twig\Node;
 
-use Twig_Compiler as Compiler;
-use Twig_Node as Node;
-use Twig_Node_Module as ModuleNode;
+use Twig\Compiler;
+use Twig\Node\ModuleNode;
+use Twig\Node\Node;
 
 /**
  * This node is added to the top of the display method of a Twig template and is used by Shoot to wrap the method's
@@ -32,8 +32,7 @@ final class DisplayStartNode extends Node
         $this->module = $module;
         $this->findPresentationModel = $findPresentationModel;
 
-        $this->setTemplateName($module->getTemplateName());
-
+        $this->setSourceContext($module->getSourceContext());
     }
 
     /**
@@ -47,7 +46,7 @@ final class DisplayStartNode extends Node
             return;
         }
 
-        $presentationModel = $this->findPresentationModel->for($this->getTemplateName());
+        $presentationModel = $this->findPresentationModel->for($this->getSourceContext());
 
         $compiler
             ->write("\$presentationModel = new $presentationModel(\$context);\n")

@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Shoot\Shoot\Twig\Node;
 
 use Shoot\Shoot\SuppressedException;
-use Twig_Compiler as Compiler;
-use Twig_Error_Runtime as RuntimeError;
-use Twig_Node as Node;
+use Twig\Compiler;
+use Twig\Error\RuntimeError;
+use Twig\Node\Node;
 
 /**
  * Represents the optional tag used to suppress runtime exceptions in templates.

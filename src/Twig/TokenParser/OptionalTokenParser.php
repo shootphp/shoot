@@ -4,9 +4,10 @@ declare(strict_types=1);
 namespace Shoot\Shoot\Twig\TokenParser;
 
 use Shoot\Shoot\Twig\Node\OptionalNode;
-use Twig_Node as Node;
-use Twig_Token as Token;
-use Twig_TokenParser as AbstractTokenParser;
+use Twig\Error\SyntaxError;
+use Twig\Node\Node;
+use Twig\Token;
+use Twig\TokenParser\AbstractTokenParser;
 
 /**
  * Parses optional tags in the token stream.
@@ -19,6 +20,8 @@ final class OptionalTokenParser extends AbstractTokenParser
      * @param Token $token
      *
      * @return Node
+     *
+     * @throws SyntaxError
      */
     public function parse(Token $token): Node
     {

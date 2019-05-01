@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Shoot\Shoot;
 
 use Shoot\Shoot\Twig\PatchingCompiler;
-use Twig_Environment as Environment;
+use Twig\Environment;
 
 /**
  * Installs Shoot in an instance of Twig.

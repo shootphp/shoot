@@ -3,17 +3,18 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Twig\NodeVisitor;
 
-use LogicException;
 use Shoot\Shoot\ModelAlreadyAssignedException;
 use Shoot\Shoot\PresentationModel;
 use Shoot\Shoot\Twig\Node\DisplayEndNode;
 use Shoot\Shoot\Twig\Node\DisplayStartNode;
 use Shoot\Shoot\Twig\Node\FindPresentationModelInterface;
 use Shoot\Shoot\Twig\Node\ModelNode;
-use Twig_Environment as Environment;
-use Twig_Node as Node;
-use Twig_Node_Module as ModuleNode;
-use Twig_NodeVisitorInterface as NodeVisitorInterface;
+use SplObjectStorage;
+use Twig\Environment;
+use Twig\Node\ModuleNode;
+use Twig\Node\Node;
+use Twig\NodeVisitor\NodeVisitorInterface;
+use Twig\Source;
 
 /**
  * Walks through model tags to assign presentation models to templates.
@@ -22,8 +23,13 @@ use Twig_NodeVisitorInterface as NodeVisitorInterface;
  */
 final class ModelNodeVisitor implements FindPresentationModelInterface, NodeVisitorInterface
 {
-    /** @var string[] */
-    private $presentationModels = [];
+    /** @var SplObjectStorage */
+    private $presentationModels;
+
+    public function __construct()
+    {
+        $this->presentationModels = new SplObjectStorage();
+    }
 
     /**
      * @param Node        $node
@@ -34,7 +40,7 @@ final class ModelNodeVisitor implements FindPresentationModelInterface, NodeVisi
     public function enterNode(Node $node, Environment $environment): Node
     {
         if ($node instanceof ModelNode) {
-            $this->assign($node->getTemplateName(), $node->getAttribute('presentation_model'));
+            $this->assign($node->getSourceContext(), $node->getAttribute('presentation_model'));
         }
 
         return $node;
@@ -68,13 +74,17 @@ final class ModelNodeVisitor implements FindPresentationModelInterface, NodeVisi
     /**
      * Returns the presentation model for the given view.
      *
-     * @param string $view
+     * @param Source $source
      *
      * @return string
      */
-    public function for(string $view): string
+    public function for(Source $source): string
     {
-        return $this->presentationModels[$view] ?? PresentationModel::class;
+        if (isset($this->presentationModels[$source])) {
+            return (string)$this->presentationModels[$source];
+        }
+
+        return PresentationModel::class;
     }
 
     /**
@@ -87,19 +97,19 @@ final class ModelNodeVisitor implements FindPresentationModelInterface, NodeVisi
     }
 
     /**
-     * @param string $view
+     * @param Source $source
      * @param string $presentationModel
      *
      * @return void
      *
-     * @throws LogicException
+     * @throws ModelAlreadyAssignedException
      */
-    private function assign(string $view, string $presentationModel): void
+    private function assign(Source $source, string $presentationModel): void
     {
-        if (isset($this->presentationModels[$view])) {
-            throw new ModelAlreadyAssignedException("A presentation model has already been assigned to {$view}");
+        if (isset($this->presentationModels[$source])) {
+            throw new ModelAlreadyAssignedException("A presentation model has already been assigned to {$source->getName()}");
         }
 
-        $this->presentationModels[$view] = $presentationModel;
+        $this->presentationModels[$source] = $presentationModel;
     }
 }

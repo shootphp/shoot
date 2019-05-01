@@ -14,8 +14,8 @@ use Shoot\Shoot\Installer;
 use Shoot\Shoot\Middleware\PresenterMiddleware;
 use Shoot\Shoot\MiddlewareInterface;
 use Shoot\Shoot\Pipeline;
-use Twig_Environment as Environment;
-use Twig_Loader_Filesystem as FilesystemLoader;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 abstract class IntegrationTestCase extends TestCase
 {
