@@ -11,8 +11,8 @@ use Shoot\Shoot\MiddlewareInterface;
 use Shoot\Shoot\Pipeline;
 use Shoot\Shoot\PresentationModel;
 use Shoot\Shoot\Tests\Fixtures\ViewFactory;
-use Twig_Filter as TwigFilter;
-use Twig_Test as TwigTest;
+use Twig\TwigFilter;
+use Twig\TwigTest;
 
 final class ExtensionTest extends TestCase
 {

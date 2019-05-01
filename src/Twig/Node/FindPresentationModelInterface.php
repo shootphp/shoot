@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Shoot\Shoot\Twig\Node;
 
+use Twig\Source;
+
 /**
  * Finds the presentation model for a given view.
  *
@@ -13,9 +15,9 @@ interface FindPresentationModelInterface
     /**
      * Returns the presentation model for the given view.
      *
-     * @param string $view
+     * @param Source $source
      *
      * @return string
      */
-    public function for(string $view): string;
+    public function for(Source $source): string;
 }

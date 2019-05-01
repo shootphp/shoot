@@ -6,9 +6,10 @@ namespace Shoot\Shoot\Twig\Node;
 use Shoot\Shoot\Extension;
 use Shoot\Shoot\SuppressedException;
 use Shoot\Shoot\View;
-use Twig_Compiler as Compiler;
-use Twig_Node as Node;
-use Twig_Node_Module as ModuleNode;
+use Twig\Compiler;
+use Twig\Node\ModuleNode;
+use Twig\Node\Node;
+use Twig\Source;
 
 /**
  * This node is added to the bottom of the display method of a Twig template and is used by Shoot to wrap its contents
@@ -30,7 +31,7 @@ final class DisplayEndNode extends Node
 
         $this->module = $module;
 
-        $this->setTemplateName($module->getTemplateName());
+        $this->setSourceContext($module->getSourceContext());
     }
 
     /**
@@ -44,9 +45,12 @@ final class DisplayEndNode extends Node
             return;
         }
 
+        /** @var Source $source */
+        $source = $this->getSourceContext();
+        $templateName = $source->getName();
+
         $extensionClass = Extension::class;
         $suppressedExceptionClass = SuppressedException::class;
-        $templateName = $this->getTemplateName();
         $viewClass = View::class;
 
         $compiler

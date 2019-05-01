@@ -6,12 +6,12 @@ namespace Shoot\Shoot;
 use Shoot\Shoot\Twig\NodeVisitor\ModelNodeVisitor;
 use Shoot\Shoot\Twig\TokenParser\ModelTokenParser;
 use Shoot\Shoot\Twig\TokenParser\OptionalTokenParser;
-use Twig_ExtensionInterface as ExtensionInterface;
-use Twig_Filter as TwigFilter;
-use Twig_Function as TwigFunction;
-use Twig_NodeVisitorInterface as NodeVisitorInterface;
-use Twig_Test as TwigTest;
-use Twig_TokenParserInterface as TokenParserInterface;
+use Twig\Extension\ExtensionInterface;
+use Twig\NodeVisitor\NodeVisitorInterface;
+use Twig\TokenParser\TokenParserInterface;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
+use Twig\TwigTest;
 
 /**
  * This extension for Twig will enable the use of Shoot.
