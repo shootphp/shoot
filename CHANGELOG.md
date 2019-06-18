@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to Shoot will be documented in this file.
 
+## [3.1.0] - 2019-06-18
+### Changed
+- Twig has been bumped to v2.11.
+
 ## [3.0.0] - 2019-05-01
 ### Changed
 - Shoot now requires Twig v2.9. In addition, it's now also pinned to this minor version, as Twig doesn't seem to follow
