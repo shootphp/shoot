@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to Shoot will be documented in this file.
 
+## [3.2.0] - 2019-12-10
+### Changed
+- Twig has been bumped to v2.12 and/or v3.0.
+
 ## [3.1.0] - 2019-06-18
 ### Changed
 - Twig has been bumped to v2.11.
