@@ -58,6 +58,10 @@ final class ModelNodeVisitor implements FindPresentationModelInterface, NodeVisi
             return $node;
         }
 
+        if (!isset($this->presentationModels[$node->getSourceContext()])) {
+            return $node;
+        }
+
         if ($node->hasAttribute('embedded_templates')) {
             /** @var ModuleNode $embeddedTemplate */
             foreach ($node->getAttribute('embedded_templates') as $embeddedTemplate) {
