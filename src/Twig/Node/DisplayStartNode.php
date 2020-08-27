@@ -51,7 +51,7 @@ final class DisplayStartNode extends Node
         $compiler
             ->write("\$presentationModel = new $presentationModel(\$context);\n")
             ->write("\$originalContext = \$context;\n\n")
-            ->write("\$callback = function (array \$context) use (\$blocks, \$originalContext) {\n")
+            ->write("\$callback = function (array \$context) use (\$blocks, \$originalContext, \$macros) {\n")
             ->indent()
             ->write("\$suppressedException = null;\n\n");
     }
